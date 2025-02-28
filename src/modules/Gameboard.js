@@ -1,3 +1,5 @@
+import Ship from "./Ship.js";
+
 export default class Gameboard {
     #boardSize = 10;
 
@@ -16,5 +18,13 @@ export default class Gameboard {
         };
 
         return board;
+    };
+
+    placeShip(row, col, shipType = 2) {
+        const ship = new Ship(shipType);
+        
+        for (let i = 0; i < ship.length; i++) {
+            this.board[row][col + i] = ship; 
+        };
     };
 };

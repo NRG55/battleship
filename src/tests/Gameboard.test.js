@@ -19,28 +19,36 @@ describe('Gameboard', () => {
                 expect(col).toBe(null);
             });
         });
-    });     
+    }); 
+    
+    test('coordinates check', () => {
+        expect(gameboard.isValidCoordinates(0, 9)).toBeTruthy();
+        expect(gameboard.isValidCoordinates(9, 0)).toBeTruthy();
+        expect(gameboard.isValidCoordinates(10, 3)).toBeFalsy();   
+        expect(gameboard.isValidCoordinates(1, -1)).toBeFalsy();
+    });
 
-    test('place a ship', () => {
-         // places a ship object with a ship length property on the board 
-        gameboard.placeShip([1, 1], ship); // takes row, col coordinates
-
-        expect(gameboard.board[1][1]).toHaveProperty('length');
-        expect(gameboard.board[1][2]).toHaveProperty('length');
-        expect(gameboard.board[2][1]).toBe(null); // by default each unoccupied square on the board is equal to null
+    test('ship placement at given coordinates', () => {        
+        gameboard.placeShip([1, 1], ship); 
+        
+        expect(gameboard.board[1][1]).toEqual({'ship': ship});
+        expect(gameboard.board[1][2]).toEqual({'ship': ship});
+        expect(gameboard.board[2][1]).toBe(null); 
     });    
 
     test('receive an attack', () => {
         gameboard.placeShip([1, 1], ship);
         gameboard.receiveAttack([1, 1]);
 
-        expect(gameboard.board[1][1]).toHaveProperty('hits', 1);
+        expect(ship.hits).toBe(1);
+        expect(gameboard.board[1][1].ship).toHaveProperty('hits', 1);
     });    
 
-    test('miss an attack', () => {
+    test('miss an attack: records the coordinates and mark the square', () => {
         gameboard.placeShip([1, 1], ship);
         gameboard.receiveAttack([2, 1]);
 
         expect(gameboard.missedAttacks[0]).toEqual([2, 1]);
-    });
-})
+        expect(gameboard.board[2][1]).toBe('Unavailable');
+    });  
+});

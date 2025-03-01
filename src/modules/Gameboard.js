@@ -21,19 +21,29 @@ export default class Gameboard {
         return board;
     };
 
-    placeShip([row, col], ship) { 
-        for (let i = 0; i < ship.length; i++) {
-            this.board[row][col + i] = ship; 
-        };
+    isValidCoordinates(row, col) {
+        return row >= 0 && col >= 0 && row < this.#boardSize && col < this.#boardSize;
+    };
+
+    placeShip([row, col], ship) {
+        if (this.isValidCoordinates(row, col)) {
+            for (let i = 0; i < ship.length; i++) {
+                this.board[row][col + i] = {ship}; 
+            };
+        };         
     };
 
     receiveAttack([row, col]) {
-        const target = this.board[row][col];
+        let square = this.board[row][col];      
 
-        if (target === null) {
-            return this.missedAttacks.push([row, col]);
-        };         
+        if (square === null) {
+            this.missedAttacks.push([row, col]);
+            // mark an empty square           
+            this.board[row][col] = "Unavailable"; 
 
-        target.hit();
+            return; 
+        };
+
+        square.ship.hit();
     };
 };

@@ -10,7 +10,7 @@ describe('Ship', () => {
     });     
 
     test('add hit', () => {
-        expect(ship.hit()).toBe(1);
+        expect(ship.hits).toBe(1);
     });
 
     test('is sunk', () => {

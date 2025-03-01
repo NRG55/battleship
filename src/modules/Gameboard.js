@@ -22,7 +22,11 @@ export default class Gameboard {
     };
 
     isValidCoordinates(row, col) {
-        return row >= 0 && col >= 0 && row < this.#boardSize && col < this.#boardSize;
+        if (row < 0 || col < 0 || row >= this.#boardSize || col >= this.#boardSize) {
+            throw new Error('Wrong coordinates: out of bounds');
+        };
+
+        return true; 
     };
 
     placeShip([row, col], ship) {

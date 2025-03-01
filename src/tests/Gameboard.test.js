@@ -24,8 +24,8 @@ describe('Gameboard', () => {
     test('coordinates check', () => {
         expect(gameboard.isValidCoordinates(0, 9)).toBeTruthy();
         expect(gameboard.isValidCoordinates(9, 0)).toBeTruthy();
-        expect(gameboard.isValidCoordinates(10, 3)).toBeFalsy();   
-        expect(gameboard.isValidCoordinates(1, -1)).toBeFalsy();
+        expect(() => gameboard.isValidCoordinates(10, 3)).toThrow("Wrong coordinates: out of bounds");   
+        expect(() => gameboard.isValidCoordinates(1, -1)).toThrow("Wrong coordinates: out of bounds");
     });
 
     test('ship placement at given coordinates', () => {        

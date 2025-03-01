@@ -5,7 +5,7 @@ export default class Gameboard {
 
     constructor() {
         this.board = this.createBoard();
-        this.missedShots = [];
+        this.missedAttacks = [];
     };
 
     createBoard() {
@@ -21,23 +21,19 @@ export default class Gameboard {
         return board;
     };
 
-    placeShip([row, col], shipType = 2) {
-        const ship = new Ship(shipType);
-
+    placeShip([row, col], ship) { 
         for (let i = 0; i < ship.length; i++) {
             this.board[row][col + i] = ship; 
         };
     };
 
     receiveAttack([row, col]) {
-        const square = this.board[row][col];
+        const target = this.board[row][col];
 
-        if (square === null) {
-            return this.missedShots.push([row, col]);
-        };        
-       
-        const ship = square;
+        if (target === null) {
+            return this.missedAttacks.push([row, col]);
+        };         
 
-        ship.hit();
+        target.hit();
     };
 };

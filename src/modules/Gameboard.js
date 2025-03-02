@@ -29,6 +29,14 @@ export default class Gameboard {
         return true; 
     };
 
+    isShipFits(row, col, ship) {
+        if (row + ship.length > this.#boardSize || col + ship.length > this.#boardSize) {
+            throw new Error('A ship is out of bounds');
+        };
+
+        return true;
+    };
+
     placeShip([row, col], ship) {
         if (this.isValidCoordinates(row, col)) {
             for (let i = 0; i < ship.length; i++) {

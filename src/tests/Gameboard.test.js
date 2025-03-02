@@ -28,6 +28,13 @@ describe('Gameboard', () => {
         expect(() => gameboard.isValidCoordinates(1, -1)).toThrow("Wrong coordinates: out of bounds");
     });
 
+    test('ship fits', () => {
+        gameboard.placeShip([1, 1], ship); 
+        
+        expect(gameboard.isShipFits(0, 8, ship)).toBeTruthy(); 
+        expect(() => gameboard.isShipFits(0, 9, ship)).toThrow("A ship is out of bounds");        
+    });
+
     test('ship placement at given coordinates', () => {        
         gameboard.placeShip([1, 1], ship); 
         
@@ -50,5 +57,7 @@ describe('Gameboard', () => {
 
         expect(gameboard.missedAttacks[0]).toEqual([2, 1]);
         expect(gameboard.board[2][1]).toBe('Unavailable');
-    });  
+    }); 
+    
+    
 });

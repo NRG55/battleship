@@ -16,4 +16,16 @@ describe('Ship', () => {
     test('is sunk', () => {
         expect(ship.isSunk()).toBe(true);
     });
+
+    test('rotate', () => {        
+        expect(ship.direction).toBe('horizontal');
+
+        ship.rotate();
+
+        expect(ship.direction).toBe('vertical');
+
+        ship.rotate();
+
+        expect(ship.direction).toBe('horizontal');
+    });
 });

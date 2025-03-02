@@ -2,7 +2,8 @@ export default class Ship {
     constructor(length) {
         this.length = length;
         this.hits = 0;
-        this.sunk = false;        
+        this.sunk = false; 
+        this.direction = 'horizontal';       
     };   
 
     isSunk() {
@@ -17,5 +18,13 @@ export default class Ship {
         if (this.hits < this.length) {
             this.hits++;           
         };        
+    };
+
+    rotate() {
+        if (this.direction === 'horizontal') {
+            this.direction = 'vertical';
+          } else {
+            this.direction = 'horizontal';
+          };
     };
 };

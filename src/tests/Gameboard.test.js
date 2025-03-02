@@ -22,25 +22,41 @@ describe('Gameboard', () => {
     }); 
     
     test('coordinates check', () => {
-        expect(gameboard.isValidCoordinates(0, 9)).toBeTruthy();
-        expect(gameboard.isValidCoordinates(9, 0)).toBeTruthy();
-        expect(() => gameboard.isValidCoordinates(10, 3)).toThrow("Wrong coordinates: out of bounds");   
-        expect(() => gameboard.isValidCoordinates(1, -1)).toThrow("Wrong coordinates: out of bounds");
+        expect(gameboard.checkCoordinates(0, 9)).toBeUndefined();
+        expect(gameboard.checkCoordinates(9, 0)).toBeUndefined();
+        expect(() => gameboard.checkCoordinates(10, 3)).toThrow("Wrong coordinates: out of bounds");   
+        expect(() => gameboard.checkCoordinates(1, -1)).toThrow("Wrong coordinates: out of bounds");
     });
 
-    test('ship fits', () => {
+    test('ship in bounds', () => {
         gameboard.placeShip([1, 1], ship); 
         
-        expect(gameboard.isShipFits(0, 8, ship)).toBeTruthy(); 
-        expect(() => gameboard.isShipFits(0, 9, ship)).toThrow("A ship is out of bounds");        
+        expect(gameboard.checkShipInBounds(8, 8, ship)).toBeUndefined();
+        expect(() => gameboard.checkShipInBounds(9, 0, ship, 'vertical')).toThrow("A ship is out of bounds");        
     });
 
-    test('ship placement at given coordinates', () => {        
+    test('square is empty', () => {        
+        gameboard.placeShip([1, 1], ship); 
+        
+        expect(gameboard.isEmptySquare(1, 1)).toBe(false);
+        expect(gameboard.isEmptySquare(1, 2)).toBe(false);
+        expect(gameboard.isEmptySquare(1, 3)).toBe(true);        
+    }); 
+
+    test('ship placement horizontal', () => {        
         gameboard.placeShip([1, 1], ship); 
         
         expect(gameboard.board[1][1]).toEqual({'ship': ship});
         expect(gameboard.board[1][2]).toEqual({'ship': ship});
         expect(gameboard.board[2][1]).toBe(null); 
+    }); 
+    
+    test('ship placement vertical', () => {        
+        gameboard.placeShip([1, 1], ship, 'vertical'); 
+        
+        expect(gameboard.board[1][1]).toEqual({'ship': ship});
+        expect(gameboard.board[2][1]).toEqual({'ship': ship});
+        expect(gameboard.board[1][2]).toBe(null); 
     });    
 
     test('receive an attack', () => {

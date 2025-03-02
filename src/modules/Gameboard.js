@@ -21,28 +21,55 @@ export default class Gameboard {
         return board;
     };
 
-    isValidCoordinates(row, col) {
+    checkCoordinates(row, col) {
         if (row < 0 || col < 0 || row >= this.#boardSize || col >= this.#boardSize) {
             throw new Error('Wrong coordinates: out of bounds');
         };
 
-        return true; 
+        return; 
     };
 
-    isShipFits(row, col, ship) {
-        if (row + ship.length > this.#boardSize || col + ship.length > this.#boardSize) {
+    checkShipInBounds(row, col, ship, direction = 'horizontal') {        
+        let startNumber = col; 
+
+        if (direction === "vertical") {
+            startNumber = row;       
+        }; 
+
+        if (startNumber + ship.length > this.#boardSize) {
             throw new Error('A ship is out of bounds');
-        };
+        }; 
 
-        return true;
+        return;
     };
 
-    placeShip([row, col], ship) {
-        if (this.isValidCoordinates(row, col)) {
-            for (let i = 0; i < ship.length; i++) {
-                this.board[row][col + i] = {ship}; 
+    isEmptySquare(row, col) {
+        return this.board[row][col] === null;
+    };
+
+    placeShip([row, col], ship, direction = 'horizontal') {
+        this.checkCoordinates(row, col);
+        this.checkShipInBounds(row, col, ship, direction);        
+        
+        if (direction === 'vertical') {
+            for (let i = 0; i < ship.length; i++) { 
+                if (!this.isEmptySquare(row + i, col)) {
+                    return;
+                };
+
+                this.board[row + i][col] = {ship}; 
             };
-        };         
+
+            return;
+        }; 
+        // direction is horizontal
+        for (let i = 0; i < ship.length; i++) { 
+            if (!this.isEmptySquare(row, col + i)) {
+                return;
+            };        
+
+            this.board[row][col + i] = {ship}; 
+        };              
     };
 
     receiveAttack([row, col]) {

@@ -6,6 +6,7 @@ export default class Gameboard {
     constructor() {
         this.board = this.createBoard();
         this.missedAttacks = [];
+        this.ships = [];
     };
 
     createBoard() {
@@ -21,55 +22,61 @@ export default class Gameboard {
         return board;
     };
 
-    checkCoordinates(row, col) {
-        if (row < 0 || col < 0 || row >= this.#boardSize || col >= this.#boardSize) {
-            throw new Error('Wrong coordinates: out of bounds');
-        };
-
-        return; 
+    isValidCoordinates(row, col) {  
+        return row >= 0 && col >= 0 && row < this.#boardSize && col < this.#boardSize; 
     };
 
-    checkShipInBounds(row, col, ship, direction = 'horizontal') {        
+    isInBounds(row, col, ship) {        
         let startNumber = col; 
 
-        if (direction === "vertical") {
+        if (ship.direction === "vertical") {
             startNumber = row;       
         }; 
 
-        if (startNumber + ship.length > this.#boardSize) {
-            throw new Error('A ship is out of bounds');
-        }; 
-
-        return;
+        return startNumber + ship.length <= this.#boardSize;
     };
 
     isEmptySquare(row, col) {
         return this.board[row][col] === null;
+    };    
+
+    getShipEdges(row, col, ship) {
+        // horizontal
+        const topRow = row - 1;
+        const bottomRow = row + 1;
+        const leftCol = col - 1;
+        const rightCol = col + ship.length;
+
+        let shipEdgesArray = [];
+        
+        for (let r = topRow; r <= bottomRow; r++) {
+            for (let c = leftCol; c <= rightCol; c++) {
+                if (!(r === row && c >= col && c < col + ship.length) &&
+                this.isValidCoordinates(r, c)) {                   
+                        shipEdgesArray.push([r, c]); 
+                    };                                             
+            };
+        };      
+      
+        return shipEdgesArray;
     };
 
-    placeShip([row, col], ship, direction = 'horizontal') {
-        this.checkCoordinates(row, col);
-        this.checkShipInBounds(row, col, ship, direction);        
-        
-        if (direction === 'vertical') {
-            for (let i = 0; i < ship.length; i++) { 
-                if (!this.isEmptySquare(row + i, col)) {
-                    return;
-                };
-
-                this.board[row + i][col] = {ship}; 
-            };
-
+    placeShip([row, col], ship) {        
+        if (!this.isValidCoordinates(row, col) || !this.isInBounds(row, col, ship)) {
             return;
-        }; 
-        // direction is horizontal
+        };             
+      
         for (let i = 0; i < ship.length; i++) { 
+            const rowCoord = ship.direction === 'horizontal' ? row : row + i;
+            const colCoord = ship.direction === 'horizontal' ? col + i : col;
+
             if (!this.isEmptySquare(row, col + i)) {
                 return;
-            };        
+            };           
 
-            this.board[row][col + i] = {ship}; 
-        };              
+            this.board[rowCoord][colCoord] = {ship}; 
+            this.ships.push([rowCoord, colCoord]);
+        };                 
     };
 
     receiveAttack([row, col]) {

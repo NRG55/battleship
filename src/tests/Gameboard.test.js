@@ -22,17 +22,18 @@ describe('Gameboard', () => {
     }); 
     
     test('coordinates check', () => {
-        expect(gameboard.checkCoordinates(0, 9)).toBeUndefined();
-        expect(gameboard.checkCoordinates(9, 0)).toBeUndefined();
-        expect(() => gameboard.checkCoordinates(10, 3)).toThrow("Wrong coordinates: out of bounds");   
-        expect(() => gameboard.checkCoordinates(1, -1)).toThrow("Wrong coordinates: out of bounds");
+        expect(gameboard.isValidCoordinates(0, 9)).toBe(true);
+        expect(gameboard.isValidCoordinates(9, 0)).toBe(true);
+        expect(gameboard.isValidCoordinates(10, 3)).toBe(false);
+        expect(gameboard.isValidCoordinates(1, -1)).toBe(false);       
     });
 
     test('ship in bounds', () => {
+        ship.rotate();
         gameboard.placeShip([1, 1], ship); 
         
-        expect(gameboard.checkShipInBounds(8, 8, ship)).toBeUndefined();
-        expect(() => gameboard.checkShipInBounds(9, 0, ship, 'vertical')).toThrow("A ship is out of bounds");        
+        expect(gameboard.isInBounds(8, 8, ship)).toBe(true);
+        expect(gameboard.isInBounds(9, 0, ship)).toBe(false);        
     });
 
     test('square is empty', () => {        
@@ -51,8 +52,9 @@ describe('Gameboard', () => {
         expect(gameboard.board[2][1]).toBe(null); 
     }); 
     
-    test('ship placement vertical', () => {        
-        gameboard.placeShip([1, 1], ship, 'vertical'); 
+    test('ship placement vertical', () => { 
+        ship.rotate();       
+        gameboard.placeShip([1, 1], ship);         
         
         expect(gameboard.board[1][1]).toEqual({'ship': ship});
         expect(gameboard.board[2][1]).toEqual({'ship': ship});
@@ -74,6 +76,8 @@ describe('Gameboard', () => {
         expect(gameboard.missedAttacks[0]).toEqual([2, 1]);
         expect(gameboard.board[2][1]).toBe('Unavailable');
     }); 
-    
-    
+
+    test('receive a ship edges coordinates', () => { 
+        expect(gameboard.getShipEdges(0, 0, ship)).toEqual([[0, 2], [1, 0], [1, 1], [1, 2]]);
+    });    
 });

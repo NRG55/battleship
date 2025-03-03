@@ -78,7 +78,7 @@ export default class Gameboard {
             };           
 
             this.board[rowCoord][colCoord] = {ship}; 
-            this.ships.push([rowCoord, colCoord]);
+            this.ships.push({ship, rowCoord, colCoord});
         };                 
     };
 
@@ -94,5 +94,10 @@ export default class Gameboard {
         };
 
         square.ship.hit();
+        // square.ship.isSunk();
+    };
+
+    isAllShipsSunk() {
+        return this.ships.every((element) => element.ship.isSunk());
     };
 };

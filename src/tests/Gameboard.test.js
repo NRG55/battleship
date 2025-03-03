@@ -3,11 +3,11 @@ import Ship from "../modules/Ship.js";
 
 describe('Gameboard', () => {
     let gameboard;
-    let ship;
+    let ship;   
     
     beforeEach(() => {
         gameboard = new Gameboard();
-        ship = new Ship(2);
+        ship = new Ship(2);     
     });
 
     test('initialization 10 x 10 array', () => {
@@ -83,5 +83,21 @@ describe('Gameboard', () => {
         ship.rotate();
 
         expect(gameboard.getShipEdges(0, 0, ship)).toEqual([[0, 1], [1, 1], [2, 0], [2, 1]]);
-    });    
+    }); 
+    
+    test('all ships have been sunk', () => {
+        gameboard.placeShip([1, 1], ship);
+        gameboard.receiveAttack([1, 1]);
+        gameboard.receiveAttack([1, 2]);       
+
+        expect(gameboard.isAllShipsSunk()).toBe(true);
+
+        const ship2 = new Ship(2);
+
+        gameboard.placeShip([8, 8], ship2);
+        gameboard.receiveAttack([8, 8]);
+        gameboard.receiveAttack([8, 7]);
+        
+        expect(gameboard.isAllShipsSunk()).toBe(false);          
+    }); 
 });

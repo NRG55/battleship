@@ -41,17 +41,20 @@ export default class Gameboard {
     };    
 
     getShipEdges(row, col, ship) {
-        // horizontal
+        //rows and columns a ship occupies depending on its direction
+        const rowLength = ship.direction === 'horizontal' ? 1 : ship.length;
+        const colLength = ship.direction === 'horizontal' ? ship.length : 1;     
+
         const topRow = row - 1;
-        const bottomRow = row + 1;
+        const bottomRow = row + rowLength;
         const leftCol = col - 1;
-        const rightCol = col + ship.length;
+        const rightCol = col + colLength;
 
         let shipEdgesArray = [];
         
         for (let r = topRow; r <= bottomRow; r++) {
             for (let c = leftCol; c <= rightCol; c++) {
-                if (!(r === row && c >= col && c < col + ship.length) &&
+                if (!(r >= row && c >= col && r < row + rowLength && c < col + colLength) &&
                 this.isValidCoordinates(r, c)) {                   
                         shipEdgesArray.push([r, c]); 
                     };                                             
@@ -70,7 +73,7 @@ export default class Gameboard {
             const rowCoord = ship.direction === 'horizontal' ? row : row + i;
             const colCoord = ship.direction === 'horizontal' ? col + i : col;
 
-            if (!this.isEmptySquare(row, col + i)) {
+            if (!this.isEmptySquare(rowCoord, colCoord)) {
                 return;
             };           
 

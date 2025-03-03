@@ -79,5 +79,9 @@ describe('Gameboard', () => {
 
     test('receive a ship edges coordinates', () => { 
         expect(gameboard.getShipEdges(0, 0, ship)).toEqual([[0, 2], [1, 0], [1, 1], [1, 2]]);
+
+        ship.rotate();
+
+        expect(gameboard.getShipEdges(0, 0, ship)).toEqual([[0, 1], [1, 1], [2, 0], [2, 1]]);
     });    
 });

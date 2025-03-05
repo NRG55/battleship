@@ -7,8 +7,5 @@ module.exports = merge(common, {
 	devServer: {
 		static: "./dist",
 		watchFiles: ["./src/index.html"], 
-	},
-	optimization: {
-		runtimeChunk: "single", 
-	},
+	},	
 });

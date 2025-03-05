@@ -1,0 +1,14 @@
+body {   
+    display: grid;
+    justify-content: center;   
+}
+
+.board-row {
+    display: flex;
+}
+
+.board-cell {
+    width: 2.5rem;
+    aspect-ratio: 1;
+    border: 1px solid black;      
+}

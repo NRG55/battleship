@@ -1,7 +1,21 @@
 import "./style.css"
 import DOM from "./modules/DOM.js";
+import Gameboard from "./modules/Gameboard.js";
+import Ship from "./modules/Ship.js";
 
 const dom = new DOM();
 const body = document.querySelector("body");
 
 dom.renderBoard(body);
+
+const board = new Gameboard();
+const ship = new Ship(4);
+const ship2 = new Ship(3);
+
+ship2.rotate();
+
+board.placeShip([1, 1], ship );
+board.placeShip([5, 4], ship2);
+
+dom.renderShips(body, board.ships) 
+   

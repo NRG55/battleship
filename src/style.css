@@ -12,3 +12,7 @@ body {
     aspect-ratio: 1;
     border: 1px solid black;      
 }
+
+.ship {
+    background-color: rgb(142, 142, 253);
+}

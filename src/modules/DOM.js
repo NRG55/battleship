@@ -20,4 +20,12 @@ export default class DOM {
             parentElement.appendChild(rowDiv);
         };
     };
+
+    renderShips(parentElement, ships) {
+        ships.forEach((ship) => {
+            const cell =  parentElement.querySelector(`div[data-row='${ship.rowCoord}'][data-col='${ship.colCoord}']`);              
+        
+            cell.classList.add("ship");       
+        });        
+    };
 };

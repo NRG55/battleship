@@ -10,9 +10,17 @@ body {
 .board-cell {
     width: 2.5rem;
     aspect-ratio: 1;
-    border: 1px solid black;      
+    border: 1px solid rgb(206, 203, 203); 
+    display: grid;
+    justify-content: center;
+    align-items: center;
 }
 
 .ship {
     background-color: rgb(142, 142, 253);
+}
+
+.shot::before {    
+    content: '•';   
+    color: black;   
 }

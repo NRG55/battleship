@@ -23,9 +23,18 @@ export default class DOM {
 
     renderShips(parentElement, ships) {
         ships.forEach((ship) => {
-            const cell =  parentElement.querySelector(`div[data-row='${ship.rowCoord}'][data-col='${ship.colCoord}']`);              
+            const cell =  parentElement.querySelector(`div[data-row='${ship.row}'][data-col='${ship.col}']`);              
         
             cell.classList.add("ship");       
+        });        
+    };
+
+    renderShots(parentElement, shots) {
+        shots.forEach((shot) => {
+            console.log(shot)
+            const cell =  parentElement.querySelector(`div[data-row='${shot.row}'][data-col='${shot.col}']`);              
+        
+            cell.classList.add("shot");       
         });        
     };
 };

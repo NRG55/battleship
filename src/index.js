@@ -17,5 +17,11 @@ ship2.rotate();
 board.placeShip([1, 1], ship );
 board.placeShip([5, 4], ship2);
 
-dom.renderShips(body, board.ships) 
+dom.renderShips(body, board.ships);
+
+board.receiveAttack([3, 2]);
+board.receiveAttack([6, 8]);
+board.receiveAttack([9, 6]);
+
+dom.renderShots(body, board.missedAttacks);
    

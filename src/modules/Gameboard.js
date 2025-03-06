@@ -78,7 +78,7 @@ export default class Gameboard {
             };           
 
             this.board[rowCoord][colCoord] = {ship}; 
-            this.ships.push({ship, rowCoord, colCoord});
+            this.ships.push({ship, row: rowCoord, col: colCoord});
         };                 
     };
 
@@ -86,7 +86,7 @@ export default class Gameboard {
         let square = this.board[row][col];      
 
         if (square === null) {
-            this.missedAttacks.push([row, col]);
+            this.missedAttacks.push({row, col});
             // mark an empty square           
             this.board[row][col] = "Unavailable"; 
 

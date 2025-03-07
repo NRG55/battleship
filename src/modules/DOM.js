@@ -22,19 +22,18 @@ export default class DOM {
     };
 
     renderShips(parentElement, ships) {
-        ships.forEach((ship) => {
+        for (const ship of ships) {
             const cell =  parentElement.querySelector(`div[data-row='${ship.row}'][data-col='${ship.col}']`);              
         
-            cell.classList.add("ship");       
-        });        
+            cell.classList.add("ship");   
+        };   
     };
 
     renderShots(parentElement, shots) {
-        shots.forEach((shot) => {
-            console.log(shot)
+        for (const shot of shots) {
             const cell =  parentElement.querySelector(`div[data-row='${shot.row}'][data-col='${shot.col}']`);              
         
-            cell.classList.add("shot");       
-        });        
+            cell.classList.add("shot");   
+        };   
     };
 };

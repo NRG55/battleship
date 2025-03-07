@@ -82,7 +82,7 @@ export default class Gameboard {
         };                 
     };
 
-    receiveAttack([row, col]) {
+    receiveAttack(row, col) {      
         let square = this.board[row][col];      
 
         if (square === null) {
@@ -91,7 +91,7 @@ export default class Gameboard {
             this.board[row][col] = "Unavailable"; 
 
             return; 
-        };
+        };       
 
         square.ship.hit();
         // square.ship.isSunk();

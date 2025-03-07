@@ -11,7 +11,8 @@ export default class Game {
         this.dom = new DOM();       
         
         this.startGame();
-        this.updateBoard();        
+        this.updateBoard(); 
+        this.placeShipsRandomly(this.player2);             
     };
 
     addBoardEventListeners(parentElement, playerBoard) {
@@ -23,7 +24,7 @@ export default class Game {
                 const col = cell.getAttribute("data-col");               
                 
                 this.handleShot(row, col, playerBoard);
-                console.log(this.player1.gameboard.missedAttacks); 
+                console.log(playerBoard.missedAttacks); 
 
                 this.updateBoard(playerBoard);                 
             };            
@@ -38,17 +39,7 @@ export default class Game {
         for (const player of this.players) { 
             const parentElement = document.querySelector(`#${player.type}`); 
                 
-            this.dom.renderBoard(parentElement);
-                        
-            if (player.type === "computer") {
-                const ship = new Ship(4);
-                const ship2 = new Ship(3);
-
-                ship2.rotate();
-
-                player.gameboard.placeShip([1, 1], ship);
-                player.gameboard.placeShip([5, 4], ship2);
-            }; 
+            this.dom.renderBoard(parentElement);           
            
             this.dom.renderShips(parentElement, player.gameboard.ships);
             this.dom.renderShots(parentElement, player.gameboard.missedAttacks);        
@@ -59,7 +50,32 @@ export default class Game {
 
     startGame() {
         for (const player of this.players) {
-            this.dom.renderPlayerSection(player);
+            this.dom.renderPlayerSection(player);           
         };       
+    };
+
+    placeShipsRandomly(player) {                
+        const shipsLengths = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+       
+        for (const length of shipsLengths) {           
+            const ship = new Ship(length);
+
+            if (Math.random() < 0.5) {
+                ship.rotate();
+            };
+
+            let isInBounds = false;
+
+            while(!isInBounds) {
+                const row = Math.floor(Math.random() * 10);
+                const col = Math.floor(Math.random() * 10);
+
+                isInBounds = player.gameboard.placeShip([row, col], ship);             
+            };
+        };
+
+        const parentElement = document.querySelector(`#${player.type}`); 
+
+        this.dom.renderShips(parentElement, player.gameboard.ships);
     };
 };

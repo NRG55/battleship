@@ -66,7 +66,7 @@ export default class Gameboard {
 
     placeShip([row, col], ship) {        
         if (!this.isValidCoordinates(row, col) || !this.isInBounds(row, col, ship)) {
-            return;
+            return false;
         };             
       
         for (let i = 0; i < ship.length; i++) { 
@@ -74,12 +74,22 @@ export default class Gameboard {
             const colCoord = ship.direction === 'horizontal' ? col + i : col;
 
             if (!this.isEmptySquare(rowCoord, colCoord)) {
-                return;
-            };           
+                return false;
+            };
+            
+            const shipEdges = this.getShipEdges(row, col, ship);
+
+            for (const [row, col] of shipEdges) {
+                if (this.board[row][col] !== null) {
+                    return false;
+                };
+            };
 
             this.board[rowCoord][colCoord] = {ship}; 
             this.ships.push({ship, row: rowCoord, col: colCoord});
-        };                 
+        }; 
+
+        return true;                
     };
 
     receiveAttack(row, col) {      

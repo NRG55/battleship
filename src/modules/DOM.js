@@ -36,4 +36,13 @@ export default class DOM {
             cell.classList.add("shot");   
         };   
     };
+
+    renderPlayerSection(player) {
+        document.querySelector("main").innerHTML += `
+                                                <section>
+                                                    <p class="player1-name">${player.type}</p>
+                                                    <div id="${player.type}"></div>
+                                                </section>                                                 
+                                                `
+    };
 };

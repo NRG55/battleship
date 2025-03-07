@@ -1,16 +1,17 @@
 import DOM from "./DOM.js";
+import Gameboard from "./Gameboard.js";
 import Player from "./Player.js";
 import Ship from "./Ship.js";
 
 export default class Game {
     constructor() {
-        this.player = new Player();
-        this.dom = new DOM();
-
-        const tempParentElement = document.querySelector("body");
-
-        this.testTempUpdateBoard(this.player.gameboard);
-        this.addBoardEventListeners(tempParentElement, this.player.gameboard)
+        this.player1 = new Player("human", new Gameboard());
+        this.player2 = new Player("computer", new Gameboard());       
+        this.players = [this.player1, this.player2];
+        this.dom = new DOM();       
+        
+        this.startGame();
+        this.updateBoard();        
     };
 
     addBoardEventListeners(parentElement, playerBoard) {
@@ -22,7 +23,7 @@ export default class Game {
                 const col = cell.getAttribute("data-col");               
                 
                 this.handleShot(row, col, playerBoard);
-                console.log(this.player.gameboard.missedAttacks); 
+                console.log(this.player1.gameboard.missedAttacks); 
 
                 this.updateBoard(playerBoard);                 
             };            
@@ -33,25 +34,32 @@ export default class Game {
         playerBoard.receiveAttack(row, col);          
     };
 
-    updateBoard(playerBoard) {         
-      this.testTempUpdateBoard(playerBoard);       
-    };
+    updateBoard() {       
+        for (const player of this.players) { 
+            const parentElement = document.querySelector(`#${player.type}`); 
+                
+            this.dom.renderBoard(parentElement);
+                        
+            if (player.type === "computer") {
+                const ship = new Ship(4);
+                const ship2 = new Ship(3);
 
-    testTempUpdateBoard(playerBoard) {        
-        const body = document.querySelector("body");       
+                ship2.rotate();
 
-        const ship = new Ship(4);
-        const ship2 = new Ship(3);
+                player.gameboard.placeShip([1, 1], ship);
+                player.gameboard.placeShip([5, 4], ship2);
+            }; 
+           
+            this.dom.renderShips(parentElement, player.gameboard.ships);
+            this.dom.renderShots(parentElement, player.gameboard.missedAttacks);        
+        
+            this.addBoardEventListeners(parentElement, player.gameboard);          
+        };       
+    }; 
 
-        ship2.rotate();        
-
-        playerBoard.placeShip([1, 1], ship);
-        playerBoard.placeShip([5, 4], ship2);
-
-        this.dom.renderBoard(body);
-        this.dom.renderShips(body, playerBoard.ships);
-        this.dom.renderShots(body, playerBoard.missedAttacks);        
-      
-        this.addBoardEventListeners(body, playerBoard);               
+    startGame() {
+        for (const player of this.players) {
+            this.dom.renderPlayerSection(player);
+        };       
     };
 };

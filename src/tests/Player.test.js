@@ -7,7 +7,7 @@ describe('Player', () => {
 
         beforeEach(() => {
             // by default player type property set to 'human' 
-            playerHuman = new Player();
+            playerHuman = new Player("human", new Gameboard());
         });
 
         test('property set to - human', () => {
@@ -23,7 +23,7 @@ describe('Player', () => {
         let playerComputer; 
 
         beforeEach(() => {
-            playerComputer = new Player('computer');
+            playerComputer = new Player('computer', new Gameboard);
         });
 
         test('property set to - human', () => {

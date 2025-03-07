@@ -3,6 +3,11 @@ body {
     justify-content: center;   
 }
 
+main {
+    display: flex;
+    gap: 2rem;
+}
+
 .board-row {
     display: flex;
 }

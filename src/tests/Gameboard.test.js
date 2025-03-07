@@ -63,7 +63,7 @@ describe('Gameboard', () => {
 
     test('receive an attack', () => {
         gameboard.placeShip([1, 1], ship);
-        gameboard.receiveAttack([1, 1]);
+        gameboard.receiveAttack(1, 1);
 
         expect(ship.hits).toBe(1);
         expect(gameboard.board[1][1].ship).toHaveProperty('hits', 1);
@@ -71,9 +71,9 @@ describe('Gameboard', () => {
 
     test('miss an attack: records the coordinates and mark the square', () => {
         gameboard.placeShip([1, 1], ship);
-        gameboard.receiveAttack([2, 1]);
+        gameboard.receiveAttack(2, 1);
 
-        expect(gameboard.missedAttacks[0]).toEqual([2, 1]);
+        expect(gameboard.missedAttacks[0]).toEqual({"col": 1, "row": 2});
         expect(gameboard.board[2][1]).toBe('Unavailable');
     }); 
 
@@ -87,16 +87,16 @@ describe('Gameboard', () => {
     
     test('all ships have been sunk', () => {
         gameboard.placeShip([1, 1], ship);
-        gameboard.receiveAttack([1, 1]);
-        gameboard.receiveAttack([1, 2]);       
+        gameboard.receiveAttack(1, 1);
+        gameboard.receiveAttack(1, 2);       
 
         expect(gameboard.isAllShipsSunk()).toBe(true);
 
         const ship2 = new Ship(2);
 
         gameboard.placeShip([8, 8], ship2);
-        gameboard.receiveAttack([8, 8]);
-        gameboard.receiveAttack([8, 7]);
+        gameboard.receiveAttack(8, 8);
+        gameboard.receiveAttack(8, 7);
         
         expect(gameboard.isAllShipsSunk()).toBe(false);          
     }); 

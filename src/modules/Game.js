@@ -41,8 +41,9 @@ export default class Game {
                 
             this.dom.renderBoard(parentElement);           
            
-            this.dom.renderShips(parentElement, player.gameboard.ships);
-            this.dom.renderShots(parentElement, player.gameboard.missedAttacks);        
+            // this.dom.renderShips(parentElement, player.gameboard.ships);
+            this.dom.renderShots(parentElement, player.gameboard.missedAttacks);
+            this.dom.renderHits(parentElement, player.gameboard.hits);        
         
             this.addBoardEventListeners(parentElement, player.gameboard);          
         };       
@@ -76,6 +77,6 @@ export default class Game {
 
         const parentElement = document.querySelector(`#${player.type}`); 
 
-        this.dom.renderShips(parentElement, player.gameboard.ships);
+        // this.dom.renderShips(parentElement, player.gameboard.ships);
     };
 };

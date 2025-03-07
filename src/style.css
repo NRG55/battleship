@@ -29,3 +29,8 @@ main {
     content: '•';   
     color: black;   
 }
+
+.hit::before {    
+    content: 'X';   
+    color: red;   
+}

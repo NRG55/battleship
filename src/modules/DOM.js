@@ -31,10 +31,18 @@ export default class DOM {
 
     renderShots(parentElement, shots) {
         for (const shot of shots) {
-            const cell =  parentElement.querySelector(`div[data-row='${shot.row}'][data-col='${shot.col}']`);              
-        
+            const cell =  parentElement.querySelector(`div[data-row='${shot.row}'][data-col='${shot.col}']`); 
+                   
             cell.classList.add("shot");   
-        };   
+        };       
+    };
+
+    renderHits(parentElement, hits) {
+        for (const hit of hits) {
+            const cell =  parentElement.querySelector(`div[data-row='${hit.row}'][data-col='${hit.col}']`); 
+                   
+            cell.classList.add("hit");   
+        };       
     };
 
     renderPlayerSection(player) {

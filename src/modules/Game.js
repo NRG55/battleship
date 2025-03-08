@@ -12,7 +12,8 @@ export default class Game {
         
         this.startGame();
         this.updateBoard(); 
-        this.placeShipsRandomly(this.player2);             
+        this.placeShipsRandomly(this.player2); 
+        this.drawShipsOverlay(this.player2.gameboard, 'computer');            
     };
 
     addBoardEventListeners(parentElement, playerBoard) {
@@ -41,7 +42,8 @@ export default class Game {
                 
             this.dom.renderBoard(parentElement);           
            
-            // this.dom.renderShips(parentElement, player.gameboard.ships);
+            this.dom.renderShips(parentElement, player.gameboard.ships);
+            this.drawShipsOverlay(player.gameboard, parentElement.id);
             this.dom.renderShots(parentElement, player.gameboard.missedAttacks);
             this.dom.renderHits(parentElement, player.gameboard.hits);        
         
@@ -77,6 +79,42 @@ export default class Game {
 
         const parentElement = document.querySelector(`#${player.type}`); 
 
-        // this.dom.renderShips(parentElement, player.gameboard.ships);
+        this.dom.renderShips(parentElement, player.gameboard.ships);
+    };
+
+    drawShipsOverlay(gameboard, parentElementId) {       
+        const overlay = document.getElementById(`ships-overlay-${parentElementId}`);      
+       
+        overlay.innerHTML = '';      
+        
+        gameboard.ships.forEach((shipObj, index) => {          
+          const {  ship, row, col } = shipObj;
+          
+          const shipDiv = document.createElement('div');         
+          // calculates a start points in percents for a ship div placement
+          const cellSize = 10; // board 10 x 10, each cell is 10%
+          const top = row * cellSize;
+          const left = col * cellSize;
+
+          let width;
+          let height;
+          // calculates size of the ship div
+          if (ship.direction === 'horizontal') {            
+            width = ship.length * cellSize;            
+            height = cellSize;
+          } else {           
+            width = cellSize;          
+            height = ship.length * cellSize;
+          };
+
+          shipDiv.classList.add('ship-overlay');
+
+          shipDiv.style.top = `${top - 0.2}%`;
+          shipDiv.style.left = `${left - 0.1}%`;
+          shipDiv.style.width = `${width - 0.4}%`;
+          shipDiv.style.height = `${height - 0.6}%`;        
+     
+          overlay.appendChild(shipDiv);
+        });
     };
 };

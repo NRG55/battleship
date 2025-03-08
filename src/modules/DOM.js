@@ -12,15 +12,25 @@ export default class DOM {
 
                 square.classList.add("board-cell");
                 square.setAttribute("data-row", row);
-                square.setAttribute("data-col", col);                
+                square.setAttribute("data-col", col);         
               
                 rowDiv.appendChild(square);                           
             };
 
             parentElement.appendChild(rowDiv);
-        };
+        };       
+     
+        parentElement.append(this.renderShipsOverlay(parentElement.id));               
     };
 
+    renderShipsOverlay(parentElementId) {
+        const overlay = document.createElement("div");         
+
+        overlay.id = `ships-overlay-${parentElementId}`;
+
+        return overlay;        
+    };    
+  
     renderShips(parentElement, ships) {
         for (const ship of ships) {
             const cell =  parentElement.querySelector(`div[data-row='${ship.row}'][data-col='${ship.col}']`);              

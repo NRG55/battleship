@@ -14,15 +14,35 @@ main {
 
 .board-cell {
     width: 2.5rem;
-    aspect-ratio: 1;
-    border: 1px solid rgb(206, 203, 203); 
+    aspect-ratio: 1;  
     display: grid;
     justify-content: center;
     align-items: center;
+    border-top: solid rgb(214, 212, 212) 1px;
+    border-left: solid rgb(214, 212, 212) 1px;
 }
 
-.ship {
-    background-color: rgb(142, 142, 253);
+#computer,
+#human {
+    position: relative;
+}
+
+#ships-overlay-computer,
+#ships-overlay-human {
+    position: absolute;
+    top: 0;
+    left: 0;   
+    width: calc(100% - 3px);
+    height: calc(100% - 3px);
+    pointer-events: none; 
+    border: solid rgb(204, 203, 203) 2px; 
+}
+
+.ship-overlay {
+    position: absolute;   
+    pointer-events: none;   
+    background-color: rgba(134, 168, 243, 0.1); 
+    border: solid rgb(120, 139, 247) 2px;    
 }
 
 .shot::before {    
@@ -30,7 +50,18 @@ main {
     color: black;   
 }
 
-.hit::before {    
-    content: 'X';   
-    color: red;   
+.hit::before { 
+    content: "✕";
+    color: rgb(253, 45, 45); 
+    font-size: 1.5rem; 
+    display: grid;
+    justify-content: center;
+    align-items: center;            
 }
+
+
+
+
+
+
+

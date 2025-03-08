@@ -87,8 +87,9 @@ export default class Gameboard {
             };
 
             this.board[rowCoord][colCoord] = {ship, hit: false}; 
-            this.ships.push({ship, row: rowCoord, col: colCoord});
+           
         }; 
+        this.ships.push({ship, row: row, col: col});
 
         return true;                
     };

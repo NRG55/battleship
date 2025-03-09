@@ -45,12 +45,12 @@ export default class Gameboard {
         //rows and columns a ship occupies depending on its direction
         const rowLength = ship.direction === 'horizontal' ? 1 : ship.length;
         const colLength = ship.direction === 'horizontal' ? ship.length : 1;     
-
+console.log(row, col)
         const topRow = row - 1;
         const bottomRow = row + rowLength;
         const leftCol = col - 1;
         const rightCol = col + colLength;
-
+        console.log(ship.length)
         let shipEdgesArray = [];
         
         for (let r = topRow; r <= bottomRow; r++) {
@@ -86,7 +86,7 @@ export default class Gameboard {
                 };
             };
 
-            this.board[rowCoord][colCoord] = {ship, hit: false}; 
+            this.board[rowCoord][colCoord] = {ship, shipStartRow: row, shipStartCol: col, hit: false}; 
            
         }; 
         this.ships.push({ship, row: row, col: col});
@@ -95,9 +95,9 @@ export default class Gameboard {
     };
 
     receiveAttack(row, col) {      
-        let square = this.board[row][col];
+        let cell = this.board[row][col];
 
-        if (square === null) {
+        if (cell === null) {
             this.missedAttacks.push({row, col});
             // mark an empty square           
             this.board[row][col] = "Missed shot"; 
@@ -105,14 +105,22 @@ export default class Gameboard {
             return; 
         };       
 
-        if (square.hit === true || square === "Missed shot") {
+        if (cell.hit === true || cell === "Missed shot") {
             return;
-        };         
-
-        square.ship.hit();
+        };
+        
+        this.board[row][col].hit = true;
         this.hits.push({row, col});
-        this.board[row][col].hit = true;      
-        // square.ship.isSunk();
+
+        cell.ship.hit(); 
+                   
+        if (cell.ship.isSunk()) {
+            const cellEdges = this.getShipEdges(cell.shipStartRow, cell.shipStartCol, cell.ship);            
+
+            for (const cell of cellEdges) {
+                this.missedAttacks.push({row: cell[0], col: cell[1]});             
+            };            
+        };
     };
 
     isAllShipsSunk() {

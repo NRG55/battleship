@@ -107,14 +107,18 @@ export default class Game {
             height = ship.length * cellSize;
           };
 
-          shipDiv.classList.add('ship-overlay');
+        //   shipDiv.classList.add('ship-overlay');
 
           shipDiv.style.top = `${top - 0.2}%`;
           shipDiv.style.left = `${left - 0.1}%`;
           shipDiv.style.width = `${width - 0.4}%`;
           shipDiv.style.height = `${height - 0.6}%`;        
-     
+          
           overlay.appendChild(shipDiv);
+
+          if (ship.sunk) {
+            shipDiv.classList.add('ship-overlay-sunk');
+          };          
         });
     };
 };

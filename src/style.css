@@ -1,6 +1,7 @@
-body {   
+body {     
     display: grid;
-    justify-content: center;   
+    justify-content: center; 
+    margin: 0;  
 }
 
 main {
@@ -38,26 +39,33 @@ main {
     border: solid rgb(204, 203, 203) 2px; 
 }
 
-.ship-overlay {
+.ship-overlay,
+.ship-overlay-color,
+.ship-overlay-sunk {
     position: absolute;   
     pointer-events: none;   
+}
+
+.ship-overlay-color {   
     background-color: rgba(134, 168, 243, 0.1); 
     border: solid rgb(120, 139, 247) 2px;    
 }
 
-.ship-overlay-sunk {
-    position: absolute;   
-    pointer-events: none;   
+.ship-overlay-sunk {   
     background-color: rgba(253, 160, 165, 0.1); 
     border: solid rgb(250, 66, 66) 2px;    
 }
 
-.shot::before {    
+.cell-shot {
+    background-color: rgba(190, 188, 188, 0.1);
+}
+
+.cell-shot::before {    
     content: '•';   
     color: black;   
 }
 
-.hit::before { 
+.cell-hit::before { 
     content: "✕";
     color: rgb(253, 45, 45);
     font-size: 1.5rem; 

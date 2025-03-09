@@ -43,7 +43,7 @@ export default class DOM {
         for (const shot of shots) {
             const cell =  parentElement.querySelector(`div[data-row='${shot.row}'][data-col='${shot.col}']`); 
                    
-            cell.classList.add("shot");   
+            cell.classList.add("cell-shot");   
         };       
     };
 
@@ -51,7 +51,7 @@ export default class DOM {
         for (const hit of hits) {
             const cell =  parentElement.querySelector(`div[data-row='${hit.row}'][data-col='${hit.col}']`); 
                    
-            cell.classList.add("hit");   
+            cell.classList.add("cell-hit");   
         };       
     };
 

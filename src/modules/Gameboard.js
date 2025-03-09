@@ -45,12 +45,12 @@ export default class Gameboard {
         //rows and columns a ship occupies depending on its direction
         const rowLength = ship.direction === 'horizontal' ? 1 : ship.length;
         const colLength = ship.direction === 'horizontal' ? ship.length : 1;     
-console.log(row, col)
+
         const topRow = row - 1;
         const bottomRow = row + rowLength;
         const leftCol = col - 1;
         const rightCol = col + colLength;
-        console.log(ship.length)
+       
         let shipEdgesArray = [];
         
         for (let r = topRow; r <= bottomRow; r++) {
@@ -86,9 +86,9 @@ console.log(row, col)
                 };
             };
 
-            this.board[rowCoord][colCoord] = {ship, shipStartRow: row, shipStartCol: col, hit: false}; 
-           
+            this.board[rowCoord][colCoord] = {ship, shipStartRow: row, shipStartCol: col, hit: false};           
         }; 
+        
         this.ships.push({ship, row: row, col: col});
 
         return true;                
@@ -113,7 +113,7 @@ console.log(row, col)
         this.hits.push({row, col});
 
         cell.ship.hit(); 
-                   
+
         if (cell.ship.isSunk()) {
             const cellEdges = this.getShipEdges(cell.shipStartRow, cell.shipStartCol, cell.ship);            
 

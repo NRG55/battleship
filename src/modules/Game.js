@@ -10,10 +10,7 @@ export default class Game {
         this.players = [this.player1, this.player2];
         this.dom = new DOM();       
         
-        this.startGame();
-        this.updateBoard(); 
-        this.placeShipsRandomly(this.player2); 
-        this.drawShipsOverlay(this.player2.gameboard, 'computer');            
+        this.startGame();               
     };
 
     addBoardEventListeners(parentElement, playerBoard) {
@@ -25,9 +22,7 @@ export default class Game {
                 const col = cell.getAttribute("data-col");               
                 
                 this.handleShot(row, col, playerBoard);
-                console.log(playerBoard.missedAttacks); 
-
-                this.updateBoard(playerBoard);                 
+                this.updateBoards();                 
             };            
         };       
     };
@@ -36,14 +31,14 @@ export default class Game {
         playerBoard.receiveAttack(row, col);          
     };
 
-    updateBoard() {       
+    updateBoards() {       
         for (const player of this.players) { 
             const parentElement = document.querySelector(`#${player.type}`); 
                 
             this.dom.renderBoard(parentElement);           
            
             this.dom.renderShips(parentElement, player.gameboard.ships);
-            this.drawShipsOverlay(player.gameboard, parentElement.id);
+            this.drawShipsOverlay(player);
             this.dom.renderShots(parentElement, player.gameboard.missedAttacks);
             this.dom.renderHits(parentElement, player.gameboard.hits);        
         
@@ -54,7 +49,13 @@ export default class Game {
     startGame() {
         for (const player of this.players) {
             this.dom.renderPlayerSection(player);           
-        };       
+        };
+        
+        this.updateBoards();
+        this.placeShipsRandomly(this.player1); 
+        this.placeShipsRandomly(this.player2);
+        this.drawShipsOverlay(this.player1); 
+        this.drawShipsOverlay(this.player2);       
     };
 
     placeShipsRandomly(player) {                
@@ -82,13 +83,13 @@ export default class Game {
         this.dom.renderShips(parentElement, player.gameboard.ships);
     };
 
-    drawShipsOverlay(gameboard, parentElementId) {       
-        const overlay = document.getElementById(`ships-overlay-${parentElementId}`);      
+    drawShipsOverlay(player) {           
+        const overlay = document.getElementById(`ships-overlay-${player.type}`);      
        
-        overlay.innerHTML = '';      
+        overlay.innerHTML = '';            
         
-        gameboard.ships.forEach((shipObj, index) => {          
-          const {  ship, row, col } = shipObj;
+        player.gameboard.ships.forEach((shipObject) => {          
+          const {  ship, row, col } = shipObject;
           
           const shipDiv = document.createElement('div');         
           // calculates a start points in percents for a ship div placement
@@ -105,20 +106,24 @@ export default class Game {
           } else {           
             width = cellSize;          
             height = ship.length * cellSize;
-          };
-
-        //   shipDiv.classList.add('ship-overlay');
+          };          
 
           shipDiv.style.top = `${top - 0.2}%`;
           shipDiv.style.left = `${left - 0.1}%`;
           shipDiv.style.width = `${width - 0.4}%`;
-          shipDiv.style.height = `${height - 0.6}%`;        
-          
-          overlay.appendChild(shipDiv);
+          shipDiv.style.height = `${height - 0.6}%`;           
+
+          shipDiv.classList.add('ship-overlay');
+
+          if (player.type === "human") {
+            shipDiv.classList.add('ship-overlay-color');
+          }; 
 
           if (ship.sunk) {
             shipDiv.classList.add('ship-overlay-sunk');
-          };          
+          }; 
+          
+          overlay.appendChild(shipDiv);
         });
     };
 };

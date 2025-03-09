@@ -6,7 +6,12 @@ body {
 
 main {
     display: flex;
-    gap: 2rem;
+    gap: 4rem;
+}
+
+section {
+    display: grid;
+    gap: 3rem;
 }
 
 .board-row {
@@ -14,13 +19,32 @@ main {
 }
 
 .board-cell {
+    position: relative;
     width: 2.5rem;
     aspect-ratio: 1;  
     display: grid;
     justify-content: center;
     align-items: center;
-    border-top: solid rgb(214, 212, 212) 1px;
-    border-left: solid rgb(214, 212, 212) 1px;
+    border: solid rgb(230, 227, 227) 1px; 
+}
+
+.marker-col,
+.marker-row {
+    position: absolute;   
+    width: 100%;
+    text-align: center;   
+    color: rgb(101, 101, 104);
+}
+
+.marker-row {   
+    left: -3rem;
+    font-size: 14px;    
+}
+
+.marker-col {
+    top: -2rem;
+    left: 0;
+    font-size: 12px;
 }
 
 #computer,
@@ -33,27 +57,30 @@ main {
     position: absolute;
     top: 0;
     left: 0;   
-    width: calc(100% - 3px);
-    height: calc(100% - 3px);
+    width: 100%;
+    height: 100%;
     pointer-events: none; 
-    border: solid rgb(204, 203, 203) 2px; 
+    outline: solid rgb(228, 224, 224) 2px;  
 }
 
 .ship-overlay,
 .ship-overlay-color,
 .ship-overlay-sunk {
     position: absolute;   
-    pointer-events: none;   
+    pointer-events: none;
+    /* border: transparent;
+    border: 3px;    */
 }
 
 .ship-overlay-color {   
     background-color: rgba(134, 168, 243, 0.1); 
-    border: solid rgb(120, 139, 247) 2px;    
+    outline: solid rgb(50, 81, 255) 2px;    
 }
 
 .ship-overlay-sunk {   
     background-color: rgba(253, 160, 165, 0.1); 
-    border: solid rgb(250, 66, 66) 2px;    
+    /* border: solid rgb(250, 66, 66) 2px;    */
+    outline: solid rgb(250, 54, 54) 2px;
 }
 
 .cell-shot {
@@ -80,3 +107,4 @@ main {
 
 
 
+ 

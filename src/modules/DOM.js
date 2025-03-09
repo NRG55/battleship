@@ -2,13 +2,33 @@ export default class DOM {
     renderBoard(parentElement, boardSize = 10) {
         parentElement.innerHTML = "";
 
+        const markersCol = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];      
+
         for (let row = 0; row < boardSize; row++) {
             const rowDiv = document.createElement("div");
 
-            rowDiv.classList.add("board-row");
+            rowDiv.classList.add("board-row");           
 
             for (let col = 0; col < boardSize; col++) {
                 const square = document.createElement("div");
+
+                if (row === 0) {
+                    const markerCol = document.createElement("div");
+
+                    markerCol.classList.add("marker-col");
+                    markerCol.innerHTML = markersCol[col];
+
+                    square.appendChild(markerCol);
+                };
+                
+                if (col === 0) {
+                    const markerRow = document.createElement("div");
+
+                    markerRow.classList.add("marker-row");
+                    markerRow.innerHTML = row + 1;
+                    
+                    square.appendChild(markerRow);
+                }; 
 
                 square.classList.add("board-cell");
                 square.setAttribute("data-row", row);
@@ -58,7 +78,7 @@ export default class DOM {
     renderPlayerSection(player) {
         document.querySelector("main").innerHTML += `
                                                 <section>
-                                                    <p class="player1-name">${player.type}</p>
+                                                    <p class="player-name">${player.type}</p>
                                                     <div id="${player.type}"></div>
                                                 </section>                                                 
                                                 `

@@ -8,9 +8,11 @@ export default class Game {
         this.player1 = new Player("human", new Gameboard());
         this.player2 = new Player("computer", new Gameboard());       
         this.players = [this.player1, this.player2];
+        this.currentPlayer;
         this.dom = new DOM();       
         
-        this.startGame();               
+        this.startGame(); 
+                  
     };
 
     addBoardEventListeners(parentElement, playerBoard) {
@@ -43,7 +45,9 @@ export default class Game {
             this.dom.renderHits(parentElement, player.gameboard.hits);        
         
             this.addBoardEventListeners(parentElement, player.gameboard);          
-        };       
+        }; 
+        this.switchPlayer();
+        console.log(this.currentPlayer);        
     }; 
 
     startGame() {
@@ -108,10 +112,10 @@ export default class Game {
             height = ship.length * cellSize;
           };          
 
-          shipDiv.style.top = `${top - 0.2}%`;
-          shipDiv.style.left = `${left - 0.1}%`;
-          shipDiv.style.width = `${width - 0.4}%`;
-          shipDiv.style.height = `${height - 0.6}%`;           
+          shipDiv.style.top = `${top}%`;
+          shipDiv.style.left = `${left}%`;
+          shipDiv.style.width = `${width}%`;
+          shipDiv.style.height = `${height}%`;           
 
           shipDiv.classList.add('ship-overlay');
 
@@ -125,5 +129,9 @@ export default class Game {
           
           overlay.appendChild(shipDiv);
         });
+    };
+
+    switchPlayer() {
+        this.currentPlayer = this.currentPlayer === this.player1 ? this.player2 : this.player1;        
     };
 };

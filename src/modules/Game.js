@@ -8,7 +8,7 @@ export default class Game {
         this.player1 = new Player("human", new Gameboard());
         this.player2 = new Player("computer", new Gameboard());       
         this.players = [this.player1, this.player2];
-        this.currentPlayer;
+        this.currentPlayer = this.player1;       
         this.dom = new DOM();       
         
         this.startGame(); 
@@ -23,31 +23,23 @@ export default class Game {
                 const row = cell.getAttribute("data-row");
                 const col = cell.getAttribute("data-col");               
                 
-                this.handleShot(row, col, playerBoard);
-                this.updateBoards();                 
+                this.handleShot(row, col, playerBoard);                               
             };            
         };       
     };
-
-    handleShot(row, col, playerBoard) {
-        playerBoard.receiveAttack(row, col);          
-    };
-
+   
     updateBoards() {       
         for (const player of this.players) { 
             const parentElement = document.querySelector(`#${player.type}`); 
                 
-            this.dom.renderBoard(parentElement);           
-           
+            this.dom.renderBoard(parentElement);            
             this.dom.renderShips(parentElement, player.gameboard.ships);
             this.drawShipsOverlay(player);
             this.dom.renderShots(parentElement, player.gameboard.missedAttacks);
             this.dom.renderHits(parentElement, player.gameboard.hits);        
         
             this.addBoardEventListeners(parentElement, player.gameboard);          
-        }; 
-        this.switchPlayer();
-        console.log(this.currentPlayer);        
+        };            
     }; 
 
     startGame() {
@@ -131,7 +123,38 @@ export default class Game {
         });
     };
 
+    handleShot(row, col, playerBoard) {      
+        playerBoard.receiveAttack(row, col);
+        
+        this.updateBoards();
+        this.switchPlayer();          
+    };
+
     switchPlayer() {
-        this.currentPlayer = this.currentPlayer === this.player1 ? this.player2 : this.player1;        
+        this.currentPlayer = this.currentPlayer === this.player1 ? this.player2 : this.player1;
+   
+        if (this.currentPlayer === this.player2) {         
+            this.handleComputerTurn();
+        };
+    };
+
+    handleComputerTurn() { 
+        const {row, col} = this.getRandomCoordinates();
+
+        this.handleShot(row, col, this.player1.gameboard);           
+    };
+
+    getRandomCoordinates() {
+        let row = Math.floor(Math.random() * 10);
+        let col = Math.floor(Math.random() * 10);
+        
+        while (this.player1.gameboard.missedAttacks.has(`${row},${col}`)) {
+          row = Math.floor(Math.random() * 10);
+          col = Math.floor(Math.random() * 10);
+        };
+    
+        this.player1.gameboard.missedAttacks.add(`${row},${col}`);
+     
+        return { row, col };
     };
 };

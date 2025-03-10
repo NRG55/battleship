@@ -4,8 +4,8 @@ export default class Gameboard {
     #boardSize = 10;
 
     constructor() {
-        this.board = this.createBoard();
-        this.missedAttacks = [];
+        this.board = this.createBoard();      
+        this.missedAttacks = new Set();
         this.hits = [];
         this.ships = [];
     };
@@ -88,7 +88,7 @@ export default class Gameboard {
 
             this.board[rowCoord][colCoord] = {ship, shipStartRow: row, shipStartCol: col, hit: false};           
         }; 
-        
+
         this.ships.push({ship, row: row, col: col});
 
         return true;                
@@ -98,7 +98,8 @@ export default class Gameboard {
         let cell = this.board[row][col];
 
         if (cell === null) {
-            this.missedAttacks.push({row, col});
+            this.missedAttacks.add(`${row},${col}`);
+          
             // mark an empty square           
             this.board[row][col] = "Missed shot"; 
 
@@ -118,7 +119,7 @@ export default class Gameboard {
             const cellEdges = this.getShipEdges(cell.shipStartRow, cell.shipStartCol, cell.ship);            
 
             for (const cell of cellEdges) {
-                this.missedAttacks.push({row: cell[0], col: cell[1]});             
+                this.missedAttacks.add(`${cell[0]},${cell[1]}`);                         
             };            
         };
     };

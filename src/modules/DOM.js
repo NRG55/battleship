@@ -26,7 +26,7 @@ export default class DOM {
 
                     markerRow.classList.add("marker-row");
                     markerRow.innerHTML = row + 1;
-                    
+
                     square.appendChild(markerRow);
                 }; 
 
@@ -59,9 +59,12 @@ export default class DOM {
         };   
     };
 
-    renderShots(parentElement, shots) {
+    renderShots(parentElement, shots) {      
         for (const shot of shots) {
-            const cell =  parentElement.querySelector(`div[data-row='${shot.row}'][data-col='${shot.col}']`); 
+            const row = shot.split(',')[0];
+            const col = shot.split(',')[1];
+                  
+            const cell =  parentElement.querySelector(`div[data-row='${row}'][data-col='${col}']`);           
                    
             cell.classList.add("cell-shot");   
         };       

@@ -36,15 +36,15 @@ section {
     color: rgb(101, 101, 104);
 }
 
-.marker-row {   
-    left: -3rem;
-    font-size: 14px;    
-}
-
 .marker-col {
     top: -2rem;
     left: 0;
     font-size: 12px;
+}
+
+.marker-row {   
+    left: -3rem;
+    font-size: 14px;    
 }
 
 #computer,
@@ -67,9 +67,7 @@ section {
 .ship-overlay-color,
 .ship-overlay-sunk {
     position: absolute;   
-    pointer-events: none;
-    /* border: transparent;
-    border: 3px;    */
+    pointer-events: none; 
 }
 
 .ship-overlay-color {   
@@ -78,8 +76,7 @@ section {
 }
 
 .ship-overlay-sunk {   
-    background-color: rgba(253, 160, 165, 0.1); 
-    /* border: solid rgb(250, 66, 66) 2px;    */
+    background-color: rgba(253, 160, 165, 0.1);   
     outline: solid rgb(250, 54, 54) 2px;
 }
 

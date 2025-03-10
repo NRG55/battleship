@@ -79,11 +79,27 @@ export default class DOM {
     };
 
     renderPlayerSection(player) {
-        document.querySelector("main").innerHTML += `
-                                                <section>
-                                                    <p class="player-name">${player.type}</p>
-                                                    <div id="${player.type}"></div>
-                                                </section>                                                 
-                                                `
+        document
+            .querySelector("main")
+            .innerHTML += `
+                        <section>
+                            <p class="player-name">${player.type}</p>
+                            <div id="${player.type}"></div>
+                        </section>                                                 
+                        `
+    };
+
+    renderNotification() {
+        const notificationWrap = document.createElement("div");
+
+        notificationWrap.classList.add("notification-wrap")
+
+        notificationWrap.innerHTML = `
+                    <div class="notification">                 
+                        <p class="message"></p>
+                        <button class="button-rematch">Rematch</button>
+                    </div>
+                       `
+        return notificationWrap;    
     };
 };

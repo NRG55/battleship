@@ -124,10 +124,16 @@ export default class Game {
     };
 
     handleShot(row, col, playerBoard) {      
-        playerBoard.receiveAttack(row, col);
-        
+        playerBoard.receiveAttack(row, col);         
+      
         this.updateBoards();
-        this.switchPlayer();          
+     
+        if (playerBoard.isAllShipsSunk()) {         
+            
+            return this.handleWin();
+        };
+
+        this.switchPlayer();         
     };
 
     switchPlayer() {
@@ -139,7 +145,7 @@ export default class Game {
     };
 
     handleComputerTurn() { 
-        const {row, col} = this.getRandomCoordinates();
+        const {row, col} = this.getRandomCoordinates();       
 
         this.handleShot(row, col, this.player1.gameboard);           
     };
@@ -156,5 +162,26 @@ export default class Game {
         this.player1.gameboard.missedAttacks.add(`${row},${col}`);
      
         return { row, col };
+    };
+
+    handleWin() {
+        const body = document.querySelector("body");
+
+        body.appendChild(this.dom.renderNotification());        
+
+        const nonification = document.querySelector(".notification");      
+        const rematchButton = document.querySelector(".button-rematch");
+        const message = document.querySelector(".message"); 
+
+        if (this.currentPlayer.type === "computer") {
+            nonification.classList.add("notification-lose");
+            message.innerHTML = "Game over. You lose."
+        } else {
+            nonification.classList.add("notification-win");
+            message.innerHTML = `Game over. ${this.currentPlayer.type} win.`
+        };        
+       
+        rematchButton.addEventListener("click", () => {      
+        });           
     };
 };

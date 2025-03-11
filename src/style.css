@@ -4,7 +4,8 @@ body {
     margin: 0;  
 }
 
-main {   
+main { 
+    position: relative;  
     display: flex;
     gap: 4rem;
     padding-top: 8rem;
@@ -162,6 +163,43 @@ main {
     padding-top: 4rem;
     gap: 2.5rem;
 }
+
+.pre-game-buttons-container {
+    position: absolute;
+    width: 100%;
+    bottom: -3.5rem;
+    display: flex;
+    justify-content: space-between; 
+    
+    button {
+        cursor: pointer;        
+        color: white;
+        font-size: 1rem;
+        padding: 4px 8px;
+        border: none;
+        border-radius: 4px;
+    }
+}
+
+#button-drag-and-drop {   
+    margin-right: 1rem;
+}
+
+#button-drag-and-drop,
+#button-randomize {
+    background-color: rgb(62, 118, 240);    
+}
+
+#button-start-game {
+    background-color: rgb(37, 187, 69);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
 
 
 

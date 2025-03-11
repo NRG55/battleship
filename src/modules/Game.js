@@ -12,8 +12,7 @@ export default class Game {
         this.dom = new DOM();       
         
         // this.startGame(); 
-        this.preGameSetup(this.player1);
-                  
+        this.preGameSetup(this.player1);                  
     };
 
     preGameSetup(player) {         
@@ -24,7 +23,8 @@ export default class Game {
 
         const parentElement = document.querySelector(`#${player.type}`);
                 
-        this.dom.renderBoard(parentElement); 
+        this.dom.renderBoard(parentElement);
+        this.dom.renderPreGameButtons(); 
     };
 
     createDraggableShips() { 

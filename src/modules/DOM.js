@@ -128,4 +128,22 @@ export default class DOM {
                         </section>                                                 
                         `
     };
+
+    renderPreGameButtons() {
+        const main = document.querySelector("main");
+
+        const buttonsContainer = document.createElement("div");
+
+        buttonsContainer.classList.add("pre-game-buttons-container");
+        buttonsContainer.innerHTML = `
+                                <div>
+                                    <button id="button-drag-and-drop" disabled>Drag & Drop</button>
+                                    <button id="button-randomize">Randomize</button>
+                                </div>  
+                                <div>                              
+                                    <button id="button-start-game" disabled>Start Game</button>
+                                </div>    
+                                `
+        main.appendChild(buttonsContainer);
+    };
 };

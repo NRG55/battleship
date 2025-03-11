@@ -18,11 +18,37 @@ export default class Game {
 
     preGameSetup(player) {         
         this.dom.renderShipsSection();
+        this.createDraggableShips();
+
         this.dom.renderPlayerSection(player); 
 
         const parentElement = document.querySelector(`#${player.type}`);
                 
         this.dom.renderBoard(parentElement); 
+    };
+
+    createDraggableShips() { 
+        const shipsLengths = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+
+        for (const shipLength of shipsLengths) {
+            const shipBox = document.querySelector(`#ship-box-${shipLength}`);
+            
+            const shipDiv = document.createElement("div");
+
+            shipDiv.classList.add("ship-draggable");
+            shipDiv.setAttribute("data-length", shipLength);
+            shipDiv.setAttribute("data-direction", "horizontal");
+            shipDiv.draggable = true;
+
+            for (let i = 0; i < shipLength; i++ ) {
+                const cell = document.createElement("div");
+
+                cell.classList.add("board-cell");
+                shipDiv.appendChild(cell);
+            };
+
+            shipBox.append(shipDiv);           
+        };
     };
 
     addBoardEventListeners(parentElement, playerBoard) {

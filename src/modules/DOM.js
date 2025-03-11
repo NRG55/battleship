@@ -106,10 +106,26 @@ export default class DOM {
         document.querySelector("main")
             .innerHTML += `
                         <section>
-                            <p class="draggable-ships-instruction">Drag the ships to the board. <br>You can rotate the ship by clicking on it.</p>
-                            <div id="ships"></div>
+                            <div class="draggable-ships-container">
+                                <div class="draggable-ships-instruction">
+                                    Drag the ships to the board. Click on any ship on the board to rotate.
+                                </div>                           
+                                <div class="ships-rows">
+                                    <div class="ships-row">
+                                        <div class="ship-box" id="ship-box-4"></div>
+                                    </div> 
+                                    <div class="ships-row">
+                                        <div class="ship-box" id="ship-box-3"></div>
+                                    </div> 
+                                    <div class="ships-row">
+                                        <div class="ship-box" id="ship-box-2"></div>
+                                    </div> 
+                                    <div class="ships-row">
+                                        <div class="ship-box" id="ship-box-1"></div>
+                                    </div>                                
+                                </div>
+                            </div>
                         </section>                                                 
                         `
-
     };
 };

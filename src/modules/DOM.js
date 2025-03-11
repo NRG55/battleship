@@ -79,8 +79,7 @@ export default class DOM {
     };
 
     renderPlayerSection(player) {
-        document
-            .querySelector("main")
+        document.querySelector("main")
             .innerHTML += `
                         <section>
                             <p class="player-name">${player.type}</p>
@@ -101,5 +100,16 @@ export default class DOM {
                     </div>
                        `
         return notificationWrap;    
+    };
+
+    renderShipsSection() {
+        document.querySelector("main")
+            .innerHTML += `
+                        <section>
+                            <p class="draggable-ships-instruction">Drag the ships to the board. <br>You can rotate the ship by clicking on it.</p>
+                            <div id="ships"></div>
+                        </section>                                                 
+                        `
+
     };
 };

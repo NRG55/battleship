@@ -19,6 +19,10 @@ section {
     display: flex;
 }
 
+.player-name {
+    text-align: center;
+}
+
 .board-cell {
     position: relative;
     width: 2.5rem;
@@ -121,7 +125,7 @@ section {
 }
 
 .notification-win {
-    background-color: rgb(44, 190, 44);
+    background-color: rgb(38, 165, 38);
 }
 
 .notification-lose {
@@ -131,8 +135,8 @@ section {
 .button-rematch {
     cursor: pointer; 
     border: solid 1px white;
-    border-radius: 4px; 
-    background-color: rgb(230, 203, 50); 
+    /* border-radius: 4px;  */
+    background-color: rgb(230, 216, 24); 
     color: rgb(19, 18, 18);
     padding: 4px 8px; 
 }

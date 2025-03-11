@@ -11,8 +11,18 @@ export default class Game {
         this.currentPlayer = this.player1;       
         this.dom = new DOM();       
         
-        this.startGame(); 
+        // this.startGame(); 
+        this.preGameSetup(this.player1);
                   
+    };
+
+    preGameSetup(player) {         
+        this.dom.renderShipsSection();
+        this.dom.renderPlayerSection(player); 
+
+        const parentElement = document.querySelector(`#${player.type}`);
+                
+        this.dom.renderBoard(parentElement); 
     };
 
     addBoardEventListeners(parentElement, playerBoard) {

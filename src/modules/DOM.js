@@ -79,16 +79,18 @@ export default class DOM {
     };
 
     renderPlayerSection(player) {
-        // let boardtitle;
+        let boardtitle;
 
-        // if (player.type === "human") {
-        //     boardtitle = "Your board";
-        // };
+        if (player.type === "human") {
+            boardtitle = "Your board";
+        } else {
+            boardtitle = "Opponent's board"
+        };
 
         document.querySelector("main")
             .innerHTML += `
                         <section>
-                            <div class="player-name">${player.type}</div>
+                            <div class="board-title">${boardtitle}</div>
                             <div id="${player.type}"></div>
                         </section>                                                 
                         `

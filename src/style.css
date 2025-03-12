@@ -1,3 +1,7 @@
+:root {
+    --cell-size: 2rem;
+}
+
 body {     
     display: grid;
     justify-content: center; 
@@ -17,12 +21,12 @@ main {
 
 .player-name {
     text-align: center;
-    margin-bottom: 2rem;
+    height: 60px;
 }
 
 .board-cell {
     position: relative;
-    width: 2rem;
+    width: var(--cell-size);
     aspect-ratio: 1;  
     display: grid;
     justify-content: center;
@@ -160,7 +164,7 @@ main {
 .draggable-ships-container {
     display: grid;
     width: 280px;
-    padding-top: 4rem;
+    padding-top: 60px;
     gap: 2.5rem;
 }
 
@@ -181,12 +185,20 @@ main {
     }
 }
 
-#button-drag-and-drop {   
-    margin-right: 1rem;
+#button-drag-and-drop { 
+    position: absolute;
+    display: none;
+    margin-right: 1rem;   
+    top: -12rem;
+    left: 5rem;   
+    background-color: white;
+    color: rgb(50, 81, 255);
+    border: solid 2px rgb(50, 81, 255);  
+    font-size: 12px;
 }
 
-#button-drag-and-drop,
 #button-randomize {
+    margin-right: 9rem;
     background-color: rgb(62, 118, 240);    
 }
 
@@ -199,6 +211,15 @@ button:disabled {
     cursor: not-allowed;
 }
 
+.ship-cell {
+    width: var(--cell-size);
+    height: var(--cell-size);    
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.1;
+}
 
 
 

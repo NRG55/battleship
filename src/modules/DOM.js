@@ -79,10 +79,16 @@ export default class DOM {
     };
 
     renderPlayerSection(player) {
+        // let boardtitle;
+
+        // if (player.type === "human") {
+        //     boardtitle = "Your board";
+        // };
+
         document.querySelector("main")
             .innerHTML += `
                         <section>
-                            <p class="player-name">${player.type}</p>
+                            <div class="player-name">${player.type}</div>
                             <div id="${player.type}"></div>
                         </section>                                                 
                         `
@@ -137,10 +143,10 @@ export default class DOM {
         buttonsContainer.classList.add("pre-game-buttons-container");
         buttonsContainer.innerHTML = `
                                 <div>
-                                    <button id="button-drag-and-drop" disabled>Drag & Drop</button>
-                                    <button id="button-randomize">Randomize</button>
+                                    <button id="button-drag-and-drop">Drag & Drop</button>                                   
                                 </div>  
-                                <div>                              
+                                <div> 
+                                    <button id="button-randomize">Randomize</button>                             
                                     <button id="button-start-game" disabled>Start Game</button>
                                 </div>    
                                 `

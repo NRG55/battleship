@@ -25,6 +25,8 @@ export default class Game {
                 
         this.dom.renderBoard(parentElement);
         this.dom.renderPreGameButtons(); 
+        this.addEventListenerToButtonRandomize(player);
+        this.addEventListenerToButtonDragAndDrop(player);
     };
 
     createDraggableShips() { 
@@ -42,8 +44,8 @@ export default class Game {
 
             for (let i = 0; i < shipLength; i++ ) {
                 const cell = document.createElement("div");
-
-                cell.classList.add("board-cell");
+                
+                cell.classList.add("ship-cell");
                 shipDiv.appendChild(cell);
             };
 
@@ -106,9 +108,10 @@ export default class Game {
                 const row = Math.floor(Math.random() * 10);
                 const col = Math.floor(Math.random() * 10);
 
-                isInBounds = player.gameboard.placeShip([row, col], ship);             
+                isInBounds = player.gameboard.placeShip([row, col], ship);                           
             };
         };
+        console.log(player.gameboard.ships) 
 
         const parentElement = document.querySelector(`#${player.type}`); 
 
@@ -219,5 +222,42 @@ export default class Game {
        
         rematchButton.addEventListener("click", () => {      
         });           
+    };
+
+    addEventListenerToButtonRandomize(player) {
+        const parentElement = document.querySelector(`#${player.type}`); 
+        const buttonRandomize = document.getElementById("button-randomize");
+        const buttonDragAndDrop = document.getElementById("button-drag-and-drop");
+        const buttonStartGame = document.getElementById("button-start-game");
+        const shipsSection = document.querySelector(".ships-rows")
+      
+        buttonRandomize.onclick = () => {
+            player.gameboard.clearBoard();            
+                
+            this.dom.renderBoard(parentElement); 
+            this.placeShipsRandomly(player);        
+            this.drawShipsOverlay(player);
+            
+            shipsSection.classList.add("disabled");
+            buttonDragAndDrop.style.display = "block";    
+            buttonStartGame.disabled = false;           
+        };
+    };
+
+    addEventListenerToButtonDragAndDrop(player) {
+        const parentElement = document.querySelector(`#${player.type}`);       
+        const buttonDragAndDrop = document.getElementById("button-drag-and-drop");
+        const buttonStartGame = document.getElementById("button-start-game");
+        const shipsSection = document.querySelector(".ships-rows")
+      
+        buttonDragAndDrop.onclick = () => {
+            player.gameboard.clearBoard();            
+                
+            this.dom.renderBoard(parentElement);        
+            
+            shipsSection.classList.remove("disabled");
+            buttonDragAndDrop.style.display = "none";    
+            buttonStartGame.disabled = true;           
+        };
     };
 };

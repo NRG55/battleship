@@ -25,30 +25,68 @@ export default class Game {
         this.dom.renderBoard(parentElement);
         this.dom.renderPreGameButtons();      
         this.addListenersPreGameButtons(player);
+        this.addDragAndDropListeners(player);  
     };
 
     createDraggableShips() { 
+        const shipsRows = document.querySelector(".ships-rows");
         const shipsLengths = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+        let shipBoxId = 0;
 
+        for (let i = 0; i < 4; i++) {
+            const shipsRow = document.createElement("div");
+            shipsRow.classList.add("ships-row");
+            shipsRow.id = "ships-row-" + i;
+
+            shipsRows.appendChild(shipsRow);
+        };
+       
         for (const shipLength of shipsLengths) {
-            const shipBox = document.querySelector(`#ship-box-${shipLength}`);
-            
+            const shipBox = document.createElement("div");
+            shipBox.classList.add("ship-box");    
+            shipBox.id = "ship-box-" + shipBoxId++;
+           
             const shipDiv = document.createElement("div");
-
             shipDiv.classList.add("ship-draggable");
             shipDiv.setAttribute("data-length", shipLength);
             shipDiv.setAttribute("data-direction", "horizontal");
             shipDiv.draggable = true;
 
+            shipBox.appendChild(shipDiv)
+
             for (let i = 0; i < shipLength; i++ ) {
                 const cell = document.createElement("div");
                 
-                cell.classList.add("ship-cell");
+                cell.setAttribute("data-offset", i);
+                cell.classList.add("ship-cell");            
                 shipDiv.appendChild(cell);
+            };           
+            
+            const shipRowOne = document.getElementById("ships-row-0");
+            const shipRowTwo= document.getElementById("ships-row-1");
+            const shipRowThree = document.getElementById("ships-row-2");
+            const shipRowFour = document.getElementById("ships-row-3");
+
+            if (shipLength === 4) {
+                shipRowOne.appendChild(shipBox);
+                shipBox.appendChild(shipDiv);
             };
 
-            shipBox.append(shipDiv);           
-        };
+            if (shipLength === 3) {
+                shipRowTwo.appendChild(shipBox);
+                shipBox.appendChild(shipDiv);
+            };
+
+            if (shipLength === 2) {
+                shipRowThree.appendChild(shipBox);
+                shipBox.appendChild(shipDiv);
+            };
+
+            if (shipLength === 1) {
+                shipRowFour.appendChild(shipBox);
+                shipBox.appendChild(shipDiv);
+            };        
+        };      
     };
 
     addBoardEventListeners(parentElement, playerBoard) {
@@ -74,7 +112,7 @@ export default class Game {
             this.dom.renderShots(parentElement, player.gameboard.missedAttacks);
             this.dom.renderHits(parentElement, player.gameboard.hits);        
         
-            this.addBoardEventListeners(parentElement, player.gameboard);          
+            this.addBoardEventListeners(parentElement, player.gameboard);                   
         };            
     }; 
 
@@ -114,9 +152,8 @@ export default class Game {
         this.dom.renderShips(parentElement, player.gameboard.ships);
     };
 
-    drawShipsOverlay(player) {           
-        const overlay = document.getElementById(`ships-overlay-${player.type}`);      
-       
+    drawShipsOverlay(player, random = true) {           
+        const overlay = document.getElementById(`ships-overlay-${player.type}`);       
         overlay.innerHTML = '';            
         
         player.gameboard.ships.forEach((shipObject) => {          
@@ -146,12 +183,17 @@ export default class Game {
 
           shipDiv.classList.add('ship-overlay');
 
-          if (player.type === "human") {
-            shipDiv.classList.add('ship-overlay-color');
-          }; 
+          if (player.type === "human" && random === true) {
+            shipDiv.classList.add('ship-overlay-blue');
+          };
+          
+          if (random === false) {
+            if (left > 60) return;             
+            shipDiv.classList.add('ship-overlay-green');
+          };          
 
           if (ship.sunk) {
-            shipDiv.classList.add('ship-overlay-sunk');
+            shipDiv.classList.add('ship-overlay-red');
           }; 
           
           overlay.appendChild(shipDiv);
@@ -257,4 +299,61 @@ export default class Game {
             this.startGame();           
         };
     };
+
+    addDragAndDropListeners(player) {
+        const body = document.querySelector("body");        
+        const cells = document.querySelectorAll("div[data-col][data-row]");
+        const ship = document.querySelector(".ship-draggable");
+        let shipLength = Number(ship.getAttribute("data-length"));
+        const shipCells = ship.childNodes;        
+        let offset; // to get the first cell of the ship       
+      
+        for (const cell of shipCells) {
+            cell.addEventListener("mouseover", (e) => {             
+                offset = e.target.getAttribute("data-offset");   
+            });
+        };       
+
+        for (const cell of cells) { 
+            cell.addEventListener("dragover", (e) => {                                               
+                const col = Number(e.target.getAttribute("data-col"));
+                const row = Number(e.target.getAttribute("data-row"));
+
+                player.gameboard.ships = [];                             
+                const coordinates = [];
+                let colStart = col - offset;               
+
+                for (let i = 0; i < shipLength; i++) {
+                    const newCol = colStart + i;
+                    
+                    if (newCol < 10 && row >= 0 && colStart >= 0) {
+                        coordinates.push([row, newCol]);                                                                      
+                    };                    
+                }; 
+
+                const startCoords = coordinates[0];             
+                let shipObgect = new Ship(shipLength);
+               
+                if (startCoords === undefined) return;
+                player.gameboard.ships.push({ ship: shipObgect, row: startCoords[0], col: startCoords[1]});
+             
+                this.drawShipsOverlay(player, false);
+            });
+        };           
+        
+        ship.addEventListener("drag", (e) => {           
+            e.target.classList.add("transparent");
+        });
+
+        ship.addEventListener("dragend", (e) => {
+           
+            e.target.classList.remove("transparent");
+        });
+
+        body.addEventListener("dragenter", () => {            
+            for (const cellDiv of document.querySelectorAll(".ship-overlay-green")) {
+                cellDiv.classList.remove("ship-overlay-green");
+            };
+        });
+    };    
 };

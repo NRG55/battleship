@@ -77,12 +77,17 @@ main {
     pointer-events: none; 
 }
 
-.ship-overlay-color {   
+.ship-overlay-blue {   
     background-color: rgba(134, 168, 243, 0.1); 
     outline: solid rgb(50, 81, 255) 2px;    
 }
 
-.ship-overlay-sunk {   
+.ship-overlay-green {   
+    background-color: rgba(158, 241, 169, 0.1); 
+    outline: solid rgb(80, 202, 80) 2px;    
+}
+
+.ship-overlay-red {   
     background-color: rgba(253, 160, 165, 0.1);   
     outline: solid rgb(250, 54, 54) 2px;
 }
@@ -152,13 +157,25 @@ main {
     display: flex;
     width: fit-content; 
     height: fit-content;
+    /* background-color: rgb(84, 150, 236); */
     background-color: rgba(134, 168, 243, 0.1); 
-    outline: solid rgb(50, 81, 255) 2px;  
+    border: solid 2px rgb(50, 81, 255); 
+    cursor: move;   
 }
 
-.ship-box {
+.dragging {
+   
+}
+
+.ships-row {
+    position: relative;
     display: flex;
     gap: 1.5rem;
+}
+
+.ship-box { 
+    height: fit-content;   
+    border: dotted 1px rgb(197, 192, 192);
 }
 
 
@@ -222,8 +239,18 @@ button:disabled {
     opacity: 0.1;
 }
 
+.overflow {
+    /* background-color: rgb(164, 191, 252); */
+}
 
+.transparent {
+    opacity: 0;
 
+}
+
+.ui-draggable-dragging {
+   opacity: 0;
+}
 
 
 

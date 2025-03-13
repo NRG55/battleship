@@ -12,23 +12,23 @@ export default class DOM {
             for (let col = 0; col < boardSize; col++) {
                 const square = document.createElement("div");
 
-                if (row === 0) {
-                    const markerCol = document.createElement("div");
+                // if (row === 0) {
+                //     const markerCol = document.createElement("div");
 
-                    markerCol.classList.add("marker-col");
-                    markerCol.innerHTML = markersCol[col];
+                //     markerCol.classList.add("marker-col", "marker");
+                //     markerCol.innerHTML = markersCol[col];
 
-                    square.appendChild(markerCol);
-                };
+                //     square.appendChild(markerCol);
+                // };
                 
-                if (col === 0) {
-                    const markerRow = document.createElement("div");
+                // if (col === 0) {
+                //     const markerRow = document.createElement("div");
 
-                    markerRow.classList.add("marker-row");
-                    markerRow.innerHTML = row + 1;
+                //     markerRow.classList.add("marker-row", "marker");
+                //     markerRow.innerHTML = row + 1;
 
-                    square.appendChild(markerRow);
-                }; 
+                //     square.appendChild(markerRow);
+                // }; 
 
                 square.classList.add("board-cell");
                 square.setAttribute("data-row", row);
@@ -118,19 +118,7 @@ export default class DOM {
                                 <div class="draggable-ships-instruction">
                                     Drag the ships to the board. Click on any ship on the board to rotate.
                                 </div>                           
-                                <div class="ships-rows">
-                                    <div class="ships-row">
-                                        <div class="ship-box" id="ship-box-4"></div>
-                                    </div> 
-                                    <div class="ships-row">
-                                        <div class="ship-box" id="ship-box-3"></div>
-                                    </div> 
-                                    <div class="ships-row">
-                                        <div class="ship-box" id="ship-box-2"></div>
-                                    </div> 
-                                    <div class="ships-row">
-                                        <div class="ship-box" id="ship-box-1"></div>
-                                    </div>                                
+                                <div class="ships-rows">                                                  
                                 </div>
                             </div>
                         </section>                                                 

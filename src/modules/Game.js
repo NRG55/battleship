@@ -303,52 +303,57 @@ export default class Game {
     addDragAndDropListeners(player) {
         const body = document.querySelector("body");        
         const cells = document.querySelectorAll("div[data-col][data-row]");
-        const ship = document.querySelector(".ship-draggable");
-        let shipLength = Number(ship.getAttribute("data-length"));
-        const shipCells = ship.childNodes;        
-        let offset; // to get the first cell of the ship       
-      
-        for (const cell of shipCells) {
-            cell.addEventListener("mouseover", (e) => {             
-                offset = e.target.getAttribute("data-offset");   
-            });
-        };       
-
-        for (const cell of cells) { 
-            cell.addEventListener("dragover", (e) => {                                               
-                const col = Number(e.target.getAttribute("data-col"));
-                const row = Number(e.target.getAttribute("data-row"));
-
-                player.gameboard.ships = [];                             
-                const coordinates = [];
-                let colStart = col - offset;               
-
-                for (let i = 0; i < shipLength; i++) {
-                    const newCol = colStart + i;
-                    
-                    if (newCol < 10 && row >= 0 && colStart >= 0) {
-                        coordinates.push([row, newCol]);                                                                      
-                    };                    
-                }; 
-
-                const startCoords = coordinates[0];             
-                let shipObgect = new Ship(shipLength);
-               
-                if (startCoords === undefined) return;
-                player.gameboard.ships.push({ ship: shipObgect, row: startCoords[0], col: startCoords[1]});
+        const ships = document.querySelectorAll(".ship-draggable");    
              
-                this.drawShipsOverlay(player, false);
-            });
-        };           
+        let offset; // to get the first cell of the ship 
+        let shipLength;
         
-        ship.addEventListener("drag", (e) => {           
-            e.target.classList.add("transparent");
-        });
+        for (const ship of ships) {
+            const shipCells = ship.childNodes; 
 
-        ship.addEventListener("dragend", (e) => {
+            ship.addEventListener("drag", (e) => {           
+                e.target.classList.add("transparent");
+                shipLength = Number(ship.getAttribute("data-length"));              
+            });            
            
-            e.target.classList.remove("transparent");
-        });
+            for (const cell of shipCells) {
+                cell.addEventListener("mouseover", (e) => {             
+                    offset = e.target.getAttribute("data-offset");                     
+                });
+            };       
+           
+            for (const cell of cells) { 
+                cell.addEventListener("dragover", (e) => {                                               
+                    const col = Number(e.target.getAttribute("data-col"));
+                    const row = Number(e.target.getAttribute("data-row"));
+                   
+                    player.gameboard.ships = [];                             
+                    const coordinates = [];
+                    let colStart = col - offset;               
+               
+                    for (let i = 0; i < shipLength; i++) {
+                        const newCol = colStart + i;
+                        
+                        if (newCol < 10 && row >= 0 && colStart >= 0) {
+                            coordinates.push([row, newCol]);                                                                      
+                        };                    
+                    }; 
+
+                    const startCoords = coordinates[0]; 
+                           
+                    let shipObgect = new Ship(shipLength);
+                
+                    if (startCoords === undefined) return;
+                    player.gameboard.ships.push({ ship: shipObgect, row: startCoords[0], col: startCoords[1]});
+                // console.log(player.gameboard.ships)
+                    this.drawShipsOverlay(player, false);
+                });
+            };          
+
+            ship.addEventListener("dragend", (e) => {            
+                e.target.classList.remove("transparent");
+            });
+        };    
 
         body.addEventListener("dragenter", () => {            
             for (const cellDiv of document.querySelectorAll(".ship-overlay-green")) {

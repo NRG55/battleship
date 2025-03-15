@@ -41,6 +41,7 @@ main {
     width: 100%;
     text-align: center;   
     color: rgb(101, 101, 104);
+    pointer-events: none;
 }
 
 .marker-col {
@@ -60,7 +61,8 @@ main {
 }
 
 #ships-overlay-computer,
-#ships-overlay-human {
+#ships-overlay-human,
+#ships-overlay-extra {
     position: absolute;
     top: 0;
     left: 0;   
@@ -68,6 +70,11 @@ main {
     height: 100%;
     pointer-events: none; 
     outline: solid rgb(228, 224, 224) 2px;  
+}
+
+#ships-overlay-extra {
+    z-index: 100;
+    outline: none;    
 }
 
 .ship-overlay,
@@ -243,8 +250,9 @@ button:disabled {
     /* background-color: rgb(164, 191, 252); */
 }
 
-.transparent {
-    opacity: 0;
+.hidden {
+    /* opacity: 0; */
+    visibility: hidden;
 
 }
 

@@ -22,7 +22,7 @@ export default class Game {
 
         const parentElement = document.querySelector(`#${player.type}`);
                 
-        this.dom.renderBoard(parentElement);
+        this.dom.renderBoard(parentElement);     
         this.dom.renderPreGameButtons();      
         this.addListenersPreGameButtons(player);
         this.addDragAndDropListeners(player);  
@@ -153,10 +153,17 @@ export default class Game {
     };
 
     drawShipsOverlay(player, random = true) {           
-        const overlay = document.getElementById(`ships-overlay-${player.type}`);       
-        overlay.innerHTML = '';            
+        let overlay = document.getElementById(`ships-overlay-${player.type}`);       
         
-        player.gameboard.ships.forEach((shipObject) => {          
+        if (random === false) {
+            overlay = document.getElementById("ships-overlay-extra");
+            overlay.innerHTML = ''; 
+        };
+
+        overlay.innerHTML = "";
+
+        player.gameboard.ships.forEach((shipObject) => { 
+          if (!shipObject) return;        
           const {  ship, row, col } = shipObject;
           
           const shipDiv = document.createElement('div');         
@@ -188,14 +195,18 @@ export default class Game {
           };
           
           if (random === false) {
-            if (left > 60) return;             
+            if (left > 60 && ship.length === 4) return; 
+            if (left > 70 && ship.length === 3) return;
+            if (left > 80 && ship.length === 2) return; 
+            if (left > 90 && ship.length === 1) return; 
+
             shipDiv.classList.add('ship-overlay-green');
           };          
 
           if (ship.sunk) {
             shipDiv.classList.add('ship-overlay-red');
           }; 
-          
+         
           overlay.appendChild(shipDiv);
         });
     };
@@ -283,9 +294,10 @@ export default class Game {
         };
 
         buttonDragAndDrop.onclick = () => {
-            player.gameboard.clearBoard();            
-                
-            this.dom.renderBoard(parentElement);        
+            main.innerHTML = "";
+            
+            player.gameboard.clearBoard();
+            this.preGameSetup(player);                 
             
             shipsSection.classList.remove("disabled");
             buttonDragAndDrop.style.display = "none";    
@@ -305,15 +317,16 @@ export default class Game {
         const cells = document.querySelectorAll("div[data-col][data-row]");
         const ships = document.querySelectorAll(".ship-draggable");    
              
+        const tempPlayer = new Player("human", new Gameboard());
         let offset; // to get the first cell of the ship 
-        let shipLength;
-        
+        let shipLength;        
+
         for (const ship of ships) {
             const shipCells = ship.childNodes; 
-
-            ship.addEventListener("drag", (e) => {           
-                e.target.classList.add("transparent");
-                shipLength = Number(ship.getAttribute("data-length"));              
+            
+            ship.addEventListener("drag", (e) => {                       
+                e.target.classList.add("hidden");
+                shipLength = Number(ship.getAttribute("data-length"));                              
             });            
            
             for (const cell of shipCells) {
@@ -322,12 +335,12 @@ export default class Game {
                 });
             };       
            
-            for (const cell of cells) { 
-                cell.addEventListener("dragover", (e) => {                                               
+            for (const cell of cells) {               
+                cell.addEventListener("dragover", (e) => {                                                                    
                     const col = Number(e.target.getAttribute("data-col"));
-                    const row = Number(e.target.getAttribute("data-row"));
+                    const row = Number(e.target.getAttribute("data-row"));               
                    
-                    player.gameboard.ships = [];                             
+                    tempPlayer.gameboard.ships = [];                             
                     const coordinates = [];
                     let colStart = col - offset;               
                
@@ -339,24 +352,43 @@ export default class Game {
                         };                    
                     }; 
 
-                    const startCoords = coordinates[0]; 
-                           
-                    let shipObgect = new Ship(shipLength);
+                    const startCoords = coordinates[0];                 
                 
                     if (startCoords === undefined) return;
-                    player.gameboard.ships.push({ ship: shipObgect, row: startCoords[0], col: startCoords[1]});
-                // console.log(player.gameboard.ships)
-                    this.drawShipsOverlay(player, false);
-                });
+
+                    let shipObgect = new Ship(shipLength);
+                    tempPlayer.gameboard.ships.push({ ship: shipObgect, row: startCoords[0], col: startCoords[1]});
+                   
+                    this.drawShipsOverlay(tempPlayer, false);
+                  
+                    return tempPlayer;
+                });                
             };          
 
-            ship.addEventListener("dragend", (e) => {            
-                e.target.classList.remove("transparent");
-            });
-        };    
+            ship.addEventListener("dragend", (e) => {               
+                const cellDivs = document.querySelectorAll(".ship-overlay-green");
+              
+                if (cellDivs.length > 0) {
+                    for (const cellDiv of cellDivs) {
+                        cellDiv.classList.remove("ship-overlay-green");                       
+                        e.target.classList.add("hidden");                       
+                    }; 
+                    
+                    let shipObject = tempPlayer.gameboard.ships[0];             
+                    player.gameboard.ships.push(shipObject);
 
-        body.addEventListener("dragenter", () => {            
-            for (const cellDiv of document.querySelectorAll(".ship-overlay-green")) {
+                    this.drawShipsOverlay(player);
+
+                   } else {
+                    e.target.classList.remove("hidden");
+                  };               
+            });
+        };     
+
+        body.addEventListener("dragenter", () => { 
+            const cellDivs = document.querySelectorAll(".ship-overlay-green");
+
+            for (const cellDiv of cellDivs) {
                 cellDiv.classList.remove("ship-overlay-green");
             };
         });

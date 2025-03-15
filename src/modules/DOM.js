@@ -12,23 +12,23 @@ export default class DOM {
             for (let col = 0; col < boardSize; col++) {
                 const square = document.createElement("div");
 
-                // if (row === 0) {
-                //     const markerCol = document.createElement("div");
+                if (row === 0) {
+                    const markerCol = document.createElement("div");
 
-                //     markerCol.classList.add("marker-col", "marker");
-                //     markerCol.innerHTML = markersCol[col];
+                    markerCol.classList.add("marker-col", "marker");
+                    markerCol.innerHTML = markersCol[col];
 
-                //     square.appendChild(markerCol);
-                // };
+                    square.appendChild(markerCol);
+                };
                 
-                // if (col === 0) {
-                //     const markerRow = document.createElement("div");
+                if (col === 0) {
+                    const markerRow = document.createElement("div");
 
-                //     markerRow.classList.add("marker-row", "marker");
-                //     markerRow.innerHTML = row + 1;
+                    markerRow.classList.add("marker-row", "marker");
+                    markerRow.innerHTML = row + 1;
 
-                //     square.appendChild(markerRow);
-                // }; 
+                    square.appendChild(markerRow);
+                }; 
 
                 square.classList.add("board-cell");
                 square.setAttribute("data-row", row);
@@ -40,7 +40,8 @@ export default class DOM {
             parentElement.appendChild(rowDiv);
         };       
      
-        parentElement.append(this.renderShipsOverlay(parentElement.id));               
+        parentElement.append(this.renderShipsOverlay(parentElement.id));
+        parentElement.append(this.renderExtraShipsOverlay());                
     };
 
     renderShipsOverlay(parentElementId) {
@@ -49,7 +50,15 @@ export default class DOM {
         overlay.id = `ships-overlay-${parentElementId}`;
 
         return overlay;        
-    };    
+    };
+    
+    renderExtraShipsOverlay() {
+        const overlay = document.createElement("div");         
+
+        overlay.id = `ships-overlay-extra`;
+
+        return overlay;        
+    }; 
   
     renderShips(parentElement, ships) {
         for (const ship of ships) {

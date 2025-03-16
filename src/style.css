@@ -5,7 +5,8 @@
 body {     
     display: grid;
     justify-content: center; 
-    margin: 0;  
+    margin: 0;
+    user-select: none; 
 }
 
 main { 
@@ -161,17 +162,28 @@ main {
 }
 
 .ship-draggable {
+    position: absolute;
     display: flex;
     width: fit-content; 
     height: fit-content;
-    /* background-color: rgb(84, 150, 236); */
     background-color: rgba(134, 168, 243, 0.1); 
     border: solid 2px rgb(50, 81, 255); 
-    cursor: move;   
+    cursor: move;
+    z-index: 1000;
+    left: -2px;
+    top: -1px;
 }
 
-.dragging {
-   
+.ship-draggable[data-length="4"] {   
+    padding-right: 6px; 
+}
+
+.ship-draggable[data-length="3"] {
+    padding-right: 4px;
+}
+
+.ship-draggable[data-length="2"] {
+    padding-right: 2px;
 }
 
 .ships-row {
@@ -180,11 +192,36 @@ main {
     gap: 1.5rem;
 }
 
-.ship-box { 
-    height: fit-content;   
-    border: dotted 1px rgb(197, 192, 192);
+.ship-box {
+    position: relative;    
+    border: dotted 1px rgb(197, 192, 192);  
+    padding-right: 4px;
+    padding-bottom: 2px;
 }
 
+.ship-box-1,
+.ship-box-2,
+.ship-box-3,
+.ship-box-4 {
+    height: 2rem;
+}
+
+.ship-box-1 {
+    width: 28px;    
+}
+
+.ship-box-2 {
+    width: 62px;   
+}
+
+.ship-box-3 {
+    width: 6rem;   
+}
+
+.ship-box-4 {
+    width: 8rem; 
+    padding-right: 6px;    
+}
 
 .draggable-ships-container {
     display: grid;
@@ -246,19 +283,11 @@ button:disabled {
     opacity: 0.1;
 }
 
-.overflow {
-    /* background-color: rgb(164, 191, 252); */
-}
-
 .hidden {
-    /* opacity: 0; */
     visibility: hidden;
-
 }
 
-.ui-draggable-dragging {
-   opacity: 0;
-}
+
 
 
 

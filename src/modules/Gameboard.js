@@ -87,7 +87,7 @@ export default class Gameboard {
             };
 
             this.board[rowCoord][colCoord] = {ship, shipStartRow: row, shipStartCol: col, hit: false};           
-        }; 
+        };         
 
         this.ships.push({ship, row: row, col: col});
 
@@ -126,7 +126,35 @@ export default class Gameboard {
 
     isAllShipsSunk() {
         return this.ships.every((element) => element.ship.isSunk());
+    };   
+
+    isShipExist(ship) {       
+        return this.ships.some((object) => object.ship.id === ship.id); 
     };
+
+    updateShipCoordinates(ship, row, col) {      
+        for (const object of this.ships) {           
+            if (object.ship.id === ship.id) {              
+                object.row = row;
+                object.col = col;
+            }; 
+        };
+    };
+
+    getPreviousShipCoordinates(ship) {      
+        for (const object of this.ships) {           
+            if (object.ship.id === ship.id) {              
+               return [object.row, object.col]
+            }; 
+        };
+    };
+
+    removePreviousShip(ship, row, col) {
+        console.log(row, col)
+        for (let i = 0; i < ship.length; i++) {          
+            this.board[row][col + i] = null;
+        };
+    }
 
     clearBoard() {
         this.board = this.createBoard(); 

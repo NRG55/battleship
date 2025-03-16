@@ -186,6 +186,17 @@ main {
     padding-right: 2px;
 }
 
+
+.ship-draggable-vertical {    
+    position: absolute;
+    background-color: rgba(134, 168, 243, 0.1); 
+    border: solid 2px rgb(50, 81, 255); 
+    width: 2rem;
+    height: 8rem;
+    z-index: 1000;
+    
+}
+
 .ships-row {
     position: relative;
     display: flex;
@@ -287,6 +298,11 @@ button:disabled {
     visibility: hidden;
 }
 
+
+#ship-1[data-direction="vertical"] {
+    width: 26px;
+    height: 132px;
+}
 
 
 

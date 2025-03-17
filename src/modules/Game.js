@@ -412,11 +412,29 @@ export default class Game {
                 currentShip.classList.remove("hidden"); 
                 
                 currentShip.onclick = () => {
-                    direction = currentShip.getAttribute("data-direction");                        
-                    direction = direction === "horizontal" ? "vertical" : "horizontal";                                          
-                    currentShip.setAttribute("data-direction", direction);          
+                    direction = currentShip.getAttribute("data-direction");                                        
+                    direction = direction === "horizontal" ? "vertical" : "horizontal";                   
 
+                    const coords = player.gameboard.getPreviousShipCoordinates(object.ship);
+                    
+                    if (!player.gameboard.isRotationPossible(object.ship.length, direction, coords[0], coords[1])) {
+                        currentShip.classList.add("ship-rotation-error");                          
+                          
+                        setTimeout(() => {
+                        currentShip.classList.remove("ship-rotation-error");
+                        }, 800);
+                    
+                        return;
+                    };
+
+                    currentShip.setAttribute("data-direction", direction);                    
+                 
+                    player.gameboard.removePreviousShip(object.ship, coords[0], coords[1]);                       
+                    player.gameboard.updateShipCoordinates(object.ship, object.row, object.col);
                     object.ship.direction = direction;
+                    
+                    player.gameboard.placeShip([object.row, object.col], object.ship);
+                    console.log(player.gameboard)
                 };                       
             });
         };     

@@ -144,17 +144,32 @@ export default class Gameboard {
     getPreviousShipCoordinates(ship) {      
         for (const object of this.ships) {           
             if (object.ship.id === ship.id) {              
-               return [object.row, object.col]
+               return [object.row, object.col, object.ship.direction]
             }; 
         };
     };
 
-    removePreviousShip(ship, row, col) {
-        console.log(row, col)
-        for (let i = 0; i < ship.length; i++) {          
-            this.board[row][col + i] = null;
+    removePreviousShip(ship, row, col) {        
+        for (let i = 0; i < ship.length; i++) {
+            const rowCoord = ship.direction === 'horizontal' ? row : row + i;
+            const colCoord = ship.direction === 'horizontal' ? col + i : col;
+
+            this.board[rowCoord][colCoord] = null;            
         };
-    }
+    };
+
+    isRotationPossible(shipLength, direction, row, col) {
+        for (let i = 1; i < shipLength; i++) {
+            const rowCoord = direction === 'horizontal' ? row : row + i;
+            const colCoord = direction === 'horizontal' ? col + i : col;
+
+            if (this.board[rowCoord][colCoord] !== null) {
+                return false;
+            };                        
+        };
+
+        return true;
+    };
 
     clearBoard() {
         this.board = this.createBoard(); 

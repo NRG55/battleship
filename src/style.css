@@ -298,10 +298,32 @@ button:disabled {
     visibility: hidden;
 }
 
-
 #ship-1[data-direction="vertical"] {
     width: 26px;
     height: 132px;
+}
+
+.ship-draggable[data-length="3"][data-direction="vertical"] {
+    width: 28px;
+    height: 100px;
+}
+
+.ship-draggable[data-length="2"][data-direction="vertical"] {
+    width: 29px;
+    height: 66px;
+}
+
+.ship-rotation-error {
+    animation: shake 0.82s;   
+    border-color: red;
+    background-color: rgba(248, 136, 136, 0.1);
+}
+  
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
 }
 
 

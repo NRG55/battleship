@@ -81,7 +81,8 @@ export default class Gameboard {
             const shipEdges = this.getShipEdges(row, col, ship);
 
             for (const [row, col] of shipEdges) {
-                if (this.board[row][col] !== null) {
+                if (this.board[row][col] !== null && this.board[row][col] !== 'X') {
+                    console.log(this.board[row][col])
                     return false;
                 };
             };
@@ -132,24 +133,26 @@ export default class Gameboard {
         return this.ships.some((object) => object.ship.id === ship.id); 
     };
 
-    updateShipCoordinates(ship, row, col) {      
+    updateShipData(ship, row, col, edges, direction) {      
         for (const object of this.ships) {           
             if (object.ship.id === ship.id) {              
                 object.row = row;
                 object.col = col;
+                object.ship.edges = edges; 
+                object.ship.direction = direction;           
             }; 
         };
     };
 
-    getPreviousShipCoordinates(ship) {      
+    getPreviousShipData(ship) {          
         for (const object of this.ships) {           
-            if (object.ship.id === ship.id) {              
-               return [object.row, object.col, object.ship.direction]
+            if (object.ship.id === ship.id) {                          
+               return [object.row, object.col, object.ship.direction, object.ship.edges]
             }; 
         };
     };
 
-    removePreviousShip(ship, row, col) {        
+    removePreviousShip(ship, row, col) {            
         for (let i = 0; i < ship.length; i++) {
             const rowCoord = ship.direction === 'horizontal' ? row : row + i;
             const colCoord = ship.direction === 'horizontal' ? col + i : col;
@@ -158,17 +161,44 @@ export default class Gameboard {
         };
     };
 
-    isRotationPossible(shipLength, direction, row, col) {
-        for (let i = 1; i < shipLength; i++) {
+    removeShipFromArray(ship) {     
+        return this.ships = this.ships.filter((el) => el.ship.id !== ship.id)
+    };
+
+    isRotationPossible(ship, direction, row, col) {
+        this.clearShipEdges(ship.edges);
+        
+        if (ship.length === 2) {
+            for (const placedShip of  this.ships) {               
+                if (placedShip.ship.length !== 2) {
+                    this.markShipEdges(placedShip.ship.edges); 
+                };                   
+            };
+        };
+
+        for (let i = 1; i < ship.length; i++) {
             const rowCoord = direction === 'horizontal' ? row : row + i;
             const colCoord = direction === 'horizontal' ? col + i : col;
 
             if (this.board[rowCoord][colCoord] !== null) {
+                this.markShipEdges(ship.edges);
                 return false;
             };                        
         };
 
         return true;
+    };
+
+    markShipEdges(shipEdgesArray) {
+        for (const [row, col] of shipEdgesArray) {        
+            this.board[row][col] = "X";
+        };
+    };
+
+    clearShipEdges(shipEdgesArray) {
+        for (const [row, col] of shipEdgesArray) {            
+            this.board[row][col] = null;
+        };
     };
 
     clearBoard() {

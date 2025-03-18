@@ -144,8 +144,7 @@ export default class Game {
 
                 isInBounds = player.gameboard.placeShip([row, col], ship);                           
             };
-        };
-        console.log(player.gameboard.ships) 
+        };       
 
         const parentElement = document.querySelector(`#${player.type}`); 
 
@@ -310,10 +309,28 @@ export default class Game {
             buttonStartGame.disabled = true;           
         };
 
-        buttonStartGame.onclick = () => { 
+        buttonStartGame.onclick = (e) => {            
+            const shipPlacement = e.target.getAttribute("data-ship-placement");
+            
             main.innerHTML = "";
 
-            this.players.push(this.player2);
+            if (shipPlacement === "manual") {            
+                const ships = player.gameboard.ships;
+
+                player.gameboard.clearBoard();
+                player.gameboard.ships = ships;              
+              
+                for (const ship of ships) {                
+                    player.gameboard.placeShip([ship.row, ship.col], ship.ship);                   
+                };
+              
+                this.players.push(this.player2);
+                this.startGame(); 
+
+                return;
+            }; 
+
+            this.players.push(this.player2);                     
             this.startGame();           
         };
     };
@@ -333,12 +350,27 @@ export default class Game {
             const shipCells = ship.childNodes;
             let currentShip = null; 
             
-            ship.addEventListener("drag", (e) => { 
-                currentShip = e.target;                                  
+            ship.addEventListener("drag", (e) => {                
+                currentShip = e.target;
+                const shipData = player.gameboard.getPreviousShipData(currentShip);               
+               
+                if (shipData) { 
+                    let shipById = player.gameboard.getShipById(currentShip.id) 
+                                 
+                    player.gameboard.removePreviousShip(shipById.ship, shipData[0], shipData[1]);
+                    player.gameboard.clearShipEdges(shipData[3]);
+
+                    for (const placedShip of player.gameboard.ships) {
+                        if (placedShip.ship.id !== currentShip.id) {
+                            player.gameboard.markShipEdges(placedShip.ship.edges);
+                        };                                           
+                    };                   
+                };
+
                 e.target.classList.add("hidden");
                 shipId = currentShip.id;         
                 shipLength = Number(ship.getAttribute("data-length"));
-                direction =  ship.getAttribute("data-direction");                                         
+                direction =  ship.getAttribute("data-direction");                                                         
             });            
            
             for (const shipCell of shipCells) {
@@ -355,8 +387,8 @@ export default class Game {
                         e.target.classList.contains("ship-draggable")) return;
 
                     const row = Number(e.target.getAttribute("data-row"));                                                                                 
-                    const col = Number(e.target.getAttribute("data-col"));              
-
+                    const col = Number(e.target.getAttribute("data-col"));                   
+                    
                     tempPlayer.gameboard.ships = [];                             
                     const coordinates = [];                    
                     const colStart = direction === 'horizontal' ? (col - offset) : col;
@@ -369,13 +401,17 @@ export default class Game {
                 
                     if (startCoords === undefined) return;
 
-                    let shipObgect = new Ship(shipLength);
+                    let shipObgect = new Ship(shipLength);                   
               
                     shipObgect.direction = direction;
                     shipObgect.id = shipId;
 
                     tempPlayer.gameboard.ships.push({ ship: shipObgect, row: startCoords[0], col: startCoords[1]});
                    
+                    if (!player.gameboard.isDropPossible(shipObgect, startCoords[0], startCoords[1])) {
+                        return;
+                    };
+
                     this.drawShipsOverlay(tempPlayer, false);                
                   
                     return tempPlayer;
@@ -384,14 +420,14 @@ export default class Game {
 
             ship.addEventListener("dragend", (e) => {                            
                 const cellDivs = document.querySelectorAll(".ship-overlay-green");
-                console.log(player.gameboard)  
+                // console.log(player.gameboard)  
                 if (cellDivs.length === 0) {              
                     return e.target.classList.remove("hidden");                          
                 };
 
                 for (const cellDiv of cellDivs) {
                     cellDiv.classList.remove("ship-overlay-green");                                              
-                };                    
+                };               
                 // object has ship object, row and col properties
                 let object = tempPlayer.gameboard.ships[0];             
              
@@ -422,7 +458,14 @@ export default class Game {
                 let currentCell = document.querySelector(`[data-row="${object.row}"][data-col="${object.col}"]`);
 
                 currentCell.appendChild(currentShip);
-                currentShip.classList.remove("hidden");                                           
+                currentShip.classList.remove("hidden");                
+               
+                if (player.gameboard.ships.length === 10) {
+                    const buttonStartGame = document.getElementById("button-start-game");
+
+                    buttonStartGame.setAttribute("data-ship-placement", "manual");                
+                    buttonStartGame.disabled = false;                    
+                };
                 
                 currentShip.onclick = () => {                   
                     direction = currentShip.getAttribute("data-direction");                                        

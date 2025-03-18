@@ -63,7 +63,7 @@ export default class DOM {
     renderShips(parentElement, ships) {
         for (const ship of ships) {
             const cell =  parentElement.querySelector(`div[data-row='${ship.row}'][data-col='${ship.col}']`);              
-        
+     
             cell.classList.add("ship");   
         };   
     };
@@ -146,7 +146,7 @@ export default class DOM {
                                 </div>  
                                 <div> 
                                     <button id="button-randomize">Randomize</button>                             
-                                    <button id="button-start-game" disabled>Start Game</button>
+                                    <button id="button-start-game" data-ship-placement="random" disabled>Start Game</button>
                                 </div>    
                                 `
         main.appendChild(buttonsContainer);

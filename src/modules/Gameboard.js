@@ -65,11 +65,11 @@ export default class Gameboard {
         return shipEdgesArray;
     };
 
-    placeShip([row, col], ship) {        
+    placeShip([row, col], ship) {       
         if (!this.isValidCoordinates(row, col) || !this.isInBounds(row, col, ship)) {
             return false;
         };             
-      
+    
         for (let i = 0; i < ship.length; i++) { 
             const rowCoord = ship.direction === 'horizontal' ? row : row + i;
             const colCoord = ship.direction === 'horizontal' ? col + i : col;
@@ -82,7 +82,7 @@ export default class Gameboard {
 
             for (const [row, col] of shipEdges) {
                 if (this.board[row][col] !== null && this.board[row][col] !== 'X') {
-                    console.log(this.board[row][col])
+                 
                     return false;
                 };
             };
@@ -133,6 +133,11 @@ export default class Gameboard {
         return this.ships.some((object) => object.ship.id === ship.id); 
     };
 
+    getShipById(shipId) {
+        const shipArray = this.ships.filter((el) => el.ship.id === shipId);
+        return shipArray[0];
+    };    
+
     updateShipData(ship, row, col, edges, direction) {      
         for (const object of this.ships) {           
             if (object.ship.id === ship.id) {              
@@ -152,12 +157,12 @@ export default class Gameboard {
         };
     };
 
-    removePreviousShip(ship, row, col) {            
+    removePreviousShip(ship, row, col) {               
         for (let i = 0; i < ship.length; i++) {
             const rowCoord = ship.direction === 'horizontal' ? row : row + i;
             const colCoord = ship.direction === 'horizontal' ? col + i : col;
 
-            this.board[rowCoord][colCoord] = null;            
+            this.board[rowCoord][colCoord] = null;                      
         };
     };
 
@@ -166,11 +171,11 @@ export default class Gameboard {
     };
 
     isRotationPossible(ship, direction, row, col) {
-        this.clearShipEdges(ship.edges);
+        this.clearShipEdges(ship.edges);         
         
         if (ship.length === 2) {
             for (const placedShip of  this.ships) {               
-                if (placedShip.ship.length !== 2) {
+                if (placedShip.ship.id !== ship.id) {
                     this.markShipEdges(placedShip.ship.edges); 
                 };                   
             };
@@ -179,11 +184,28 @@ export default class Gameboard {
         for (let i = 1; i < ship.length; i++) {
             const rowCoord = direction === 'horizontal' ? row : row + i;
             const colCoord = direction === 'horizontal' ? col + i : col;
+            
+            if (!this.isValidCoordinates(rowCoord, colCoord)) return false;
 
             if (this.board[rowCoord][colCoord] !== null) {
                 this.markShipEdges(ship.edges);
                 return false;
             };                        
+        };
+
+        return true;
+    };
+
+    isDropPossible(ship, row, col) {
+        if (!this.isInBounds(row, col, ship)) return;       
+    
+        for (let i = 0; i < ship.length; i++) {
+            const rowCoord = ship.direction === 'horizontal' ? row : row + i;
+            const colCoord = ship.direction === 'horizontal' ? col + i : col; 
+
+            if (this.board[rowCoord][colCoord] !== null) {
+                return false;
+            };                      
         };
 
         return true;

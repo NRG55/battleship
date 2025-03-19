@@ -89,30 +89,36 @@ export default class Game {
         };      
     };
 
-    addBoardEventListeners(parentElement, playerBoard) {
+    addBoardEventListeners(parentElement, player) {
         const cells = parentElement.querySelectorAll("[data-row][data-col]");
-       
-        for (const cell of cells) {           
+        
+        if (player.type === "human") return;
+
+        for (const cell of cells) { 
+            if (cell.classList.contains("cell-shot") || cell.classList.contains("cell-hit")) {
+                cell.classList.add("cell-disabled");
+            };
+
             cell.onclick = () => {
                 const row = cell.getAttribute("data-row");
-                const col = cell.getAttribute("data-col");               
+                const col = cell.getAttribute("data-col");                               
                 
-                this.handleShot(row, col, playerBoard);                               
+                this.handleShot(row, col, player.gameboard);              
             };            
         };       
     };
    
     updateBoards() {       
-        for (const player of this.players) { 
+        for (const player of this.players) {             
             const parentElement = document.querySelector(`#${player.type}`); 
                 
             this.dom.renderBoard(parentElement);            
             this.dom.renderShips(parentElement, player.gameboard.ships);
             this.drawShipsOverlay(player);
             this.dom.renderShots(parentElement, player.gameboard.missedAttacks);
-            this.dom.renderHits(parentElement, player.gameboard.hits);        
+            this.dom.renderHits(parentElement, player.gameboard.hits);            
         
-            this.addBoardEventListeners(parentElement, player.gameboard);                   
+            this.addBoardEventListeners(parentElement, player);             
         };            
     }; 
 
@@ -123,7 +129,11 @@ export default class Game {
         
         this.updateBoards();        
         this.placeShipsRandomly(this.player2);       
-        this.drawShipsOverlay(this.player2);       
+        this.drawShipsOverlay(this.player2);
+
+        const humanBoard = document.getElementById("human");
+        
+        humanBoard.classList.add("board-disabled");       
     };
 
     placeShipsRandomly(player) {                
@@ -216,7 +226,7 @@ export default class Game {
         });
     };
 
-    handleShot(row, col, playerBoard) {      
+    handleShot(row, col, playerBoard) {
         playerBoard.receiveAttack(row, col);         
       
         this.updateBoards();
@@ -226,7 +236,7 @@ export default class Game {
             return this.handleWin();
         };
 
-        this.switchPlayer();         
+        this.switchPlayer();             
     };
 
     switchPlayer() {
@@ -237,10 +247,24 @@ export default class Game {
         };
     };
 
-    handleComputerTurn() { 
-        const {row, col} = this.getRandomCoordinates();       
+    handleComputerTurn() {
+        const humanBoard = document.getElementById("human");
+        const computerBoard = document.getElementById("computer");
 
-        this.handleShot(row, col, this.player1.gameboard);           
+        humanBoard.classList.remove("board-disabled");
+        computerBoard.classList.add("board-disabled");       
+        
+        setTimeout(() => { 
+            const {row, col} = this.getRandomCoordinates();       
+
+            this.handleShot(row, col, this.player1.gameboard); 
+        }, 400);
+
+         
+        setTimeout(() => { 
+            humanBoard.classList.add("board-disabled");
+            computerBoard.classList.remove("board-disabled");            
+        }, 800);      
     };
 
     getRandomCoordinates() {
@@ -271,10 +295,15 @@ export default class Game {
             message.innerHTML = "Game over. You lose."
         } else {
             nonification.classList.add("notification-win");
-            message.innerHTML = `Game over. ${this.currentPlayer.type} win.`
+            message.innerHTML = `Game over. You win.`
         };        
        
-        rematchButton.addEventListener("click", () => {      
+        rematchButton.addEventListener("click", () => {
+            for (const player of this.players) {
+                player.gameboard.clearBoard();
+            };
+
+            location.reload();            
         });           
     };   
 
@@ -332,7 +361,7 @@ export default class Game {
 
                 return;
             }; 
-
+            
             this.players.push(this.player2);                     
             this.startGame();           
         };

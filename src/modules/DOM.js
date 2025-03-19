@@ -1,7 +1,7 @@
 export default class DOM {  
     renderBoard(parentElement, boardSize = 10) {
         parentElement.innerHTML = "";
-
+console.log(parentElement.id)
         const markersCol = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];      
 
         for (let row = 0; row < boardSize; row++) {
@@ -28,9 +28,14 @@ export default class DOM {
                     markerRow.innerHTML = row + 1;
 
                     square.appendChild(markerRow);
-                }; 
-
-                square.classList.add("board-cell");
+                };
+                
+                if (parentElement.id === "human") {
+                    square.classList.add("board-cell-nohover");
+                } else {
+                    square.classList.add("board-cell");
+                };
+                
                 square.setAttribute("data-row", row);
                 square.setAttribute("data-col", col);         
               

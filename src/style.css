@@ -44,7 +44,8 @@ main {
     color:  rgb(110, 161, 110);   
 }
 
-.board-cell {
+.board-cell,
+.board-cell-nohover {
     position: relative;
     width: var(--cell-size);
     aspect-ratio: 1;  
@@ -52,6 +53,15 @@ main {
     justify-content: center;
     align-items: center;
     border: solid rgb(230, 227, 227) 1px; 
+    cursor: pointer;   
+}
+
+.board-cell:hover {
+    border-color: rgb(46, 219, 84);
+}
+
+.board-cell-nohover {    
+    cursor: auto;   
 }
 
 .marker-col,
@@ -267,8 +277,7 @@ main {
     justify-content: space-between; 
     
     button {
-        cursor: pointer;        
-        /* color: white; */
+        cursor: pointer;     
         font-size: 1rem;
         padding: 4px 8px;
         border: none;
@@ -298,8 +307,7 @@ main {
 #button-start-game {
     color: rgb(13, 165, 46);
     background-color: white;
-    border: solid 2px rgb(13, 165, 46);   
-    
+    border: solid 2px rgb(13, 165, 46);    
 }
 
 button:disabled {
@@ -315,6 +323,15 @@ button:disabled {
 .disabled {
     pointer-events: none;
     opacity: 0.1;
+}
+
+.cell-disabled {
+    pointer-events: none; 
+}
+
+.board-disabled {
+    pointer-events: none; 
+    opacity: 0.6;  
 }
 
 .hidden {

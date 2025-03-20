@@ -14,7 +14,8 @@ export default class Game {
         this.preGameSetup(this.player1);                  
     };
 
-    preGameSetup(player) {         
+    preGameSetup(player) {
+        this.dom.renderHeaderAndMain();         
         this.dom.renderShipsSection();
         this.createDraggableShips();
 
@@ -226,16 +227,24 @@ export default class Game {
         });
     };
 
-    handleShot(row, col, playerBoard) {
-        playerBoard.receiveAttack(row, col);         
-      
-        this.updateBoards();
-     
-        if (playerBoard.isAllShipsSunk()) {         
-            
-            return this.handleWin();
-        };
+    handleShot(row, col, playerBoard) { 
+        if (playerBoard.receiveAttack(row, col)) {
+            this.updateBoards();
 
+            if (this.currentPlayer.type === "computer") {
+                this.handleComputerTurn();
+            };
+
+            this.updateBoards();
+
+            if (playerBoard.isAllShipsSunk()) {           
+                return this.handleWin();
+            }; 
+
+            return;
+        };         
+
+        this.updateBoards(); 
         this.switchPlayer();             
     };
 
@@ -452,7 +461,7 @@ export default class Game {
 
             ship.addEventListener("dragend", (e) => {                            
                 const cellDivs = document.querySelectorAll(".ship-overlay-green");
-                // console.log(player.gameboard)  
+                
                 if (cellDivs.length === 0) {              
                     return e.target.classList.remove("hidden");                          
                 };
@@ -474,9 +483,8 @@ export default class Game {
                     player.gameboard.updateShipData(object.ship, object.row, object.col, object.ship.edges );                   
                     
                     player.gameboard.placeShip([object.row, object.col], object.ship);                  
-                    player.gameboard.markShipEdges(object.ship.edges);
-                
-                    console.log(player.gameboard)                  
+                    player.gameboard.markShipEdges(object.ship.edges);                
+                                    
                 } else {                  
                     player.gameboard.placeShip([object.row, object.col], object.ship);
                     object.ship.edges = player.gameboard.getShipEdges(object.row, object.col, object.ship);
@@ -527,8 +535,7 @@ export default class Game {
                     player.gameboard.updateShipData(object.ship, object.row, object.col, object.ship.edges, object.ship.direction);                    
                     
                     player.gameboard.placeShip([object.row, object.col], object.ship);
-                    player.gameboard.markShipEdges(object.ship.edges);
-                    console.log(player.gameboard)
+                    player.gameboard.markShipEdges(object.ship.edges);                 
 
                     for (const placedShip of  player.gameboard.ships) {
                         player.gameboard.markShipEdges(placedShip.ship.edges);                    

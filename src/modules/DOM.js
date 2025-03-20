@@ -1,7 +1,16 @@
 export default class DOM {  
+    renderHeaderAndMain() {
+        const body = document.querySelector("body");
+
+        body.innerHTML = `
+                <header><span>BATTLE</span><span>SHIP</span></header> 
+                <main></main>                         
+                `
+    };
+    
     renderBoard(parentElement, boardSize = 10) {
         parentElement.innerHTML = "";
-console.log(parentElement.id)
+
         const markersCol = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];      
 
         for (let row = 0; row < boardSize; row++) {

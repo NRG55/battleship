@@ -122,7 +122,9 @@ export default class Gameboard {
             for (const cell of cellEdges) {
                 this.missedAttacks.add(`${cell[0]},${cell[1]}`);                         
             };            
-        };        
+        };
+        
+        return true;
     };
 
     isAllShipsSunk() {

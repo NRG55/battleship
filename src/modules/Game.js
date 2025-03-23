@@ -470,31 +470,9 @@ export default class Game {
                     cellDiv.classList.remove("ship-overlay-green");                                              
                 };               
                 // shipObject { ship: {}, row: number, col: number }
-                const shipObject = tempPlayer.gameboard.ships[0];             
-             
-                if (player.gameboard.isShipExist(shipObject.ship)) {
-                    // shipData is [row, col, direction, array of ship edges]
-                    const shipData = player.gameboard.getPreviousShipData(shipObject.ship);                                    
-                  
-                    player.gameboard.removePreviousShip(shipObject.ship, shipData[0], shipData[1]);                  
-                    player.gameboard.clearShipEdges(shipData[3]);                    
-                    player.gameboard.removeShipFromArray(shipObject.ship);
-                     
-                    shipObject.ship.edges = player.gameboard.getShipEdges(shipObject.row, shipObject.col, shipObject.ship);
-                    player.gameboard.updateShipData(shipObject.ship, shipObject.row, shipObject.col, shipObject.ship.edges );                   
-                    
-                    player.gameboard.placeShip([shipObject.row, shipObject.col], shipObject.ship);                  
-                    player.gameboard.markShipEdges(shipObject.ship.edges);                
-                                    
-                } else {                  
-                    player.gameboard.placeShip([shipObject.row, shipObject.col], shipObject.ship);
-                    shipObject.ship.edges = player.gameboard.getShipEdges(shipObject.row, shipObject.col, shipObject.ship);
-                    player.gameboard.markShipEdges(shipObject.ship.edges);              
-                };
-
-                for (const placedShip of  player.gameboard.ships) {
-                    player.gameboard.markShipEdges(placedShip.ship.edges);                    
-                };
+                const shipObject = tempPlayer.gameboard.ships[0];
+                
+                this.handleShipPlacement(player, shipObject);               
          
                 let currentCell = document.querySelector(`[data-row="${shipObject.row}"][data-col="${shipObject.col}"]`);
 
@@ -521,6 +499,32 @@ export default class Game {
                 cellDiv.classList.remove("ship-overlay-green");
             };
         });
+    };
+    
+    handleShipPlacement(player, shipObject) {
+        if (player.gameboard.isShipExist(shipObject.ship)) {
+            // shipData is [row, col, direction, array of ship edges]
+            const shipData = player.gameboard.getPreviousShipData(shipObject.ship);                                    
+          
+            player.gameboard.removePreviousShip(shipObject.ship, shipData[0], shipData[1]);                  
+            player.gameboard.clearShipEdges(shipData[3]);                    
+            player.gameboard.removeShipFromArray(shipObject.ship);
+             
+            shipObject.ship.edges = player.gameboard.getShipEdges(shipObject.row, shipObject.col, shipObject.ship);
+            player.gameboard.updateShipData(shipObject.ship, shipObject.row, shipObject.col, shipObject.ship.edges );                   
+            
+            player.gameboard.placeShip([shipObject.row, shipObject.col], shipObject.ship);                  
+            player.gameboard.markShipEdges(shipObject.ship.edges);                
+                            
+        } else {                  
+            player.gameboard.placeShip([shipObject.row, shipObject.col], shipObject.ship);
+            shipObject.ship.edges = player.gameboard.getShipEdges(shipObject.row, shipObject.col, shipObject.ship);
+            player.gameboard.markShipEdges(shipObject.ship.edges);              
+        };
+
+        for (const placedShip of  player.gameboard.ships) {
+            player.gameboard.markShipEdges(placedShip.ship.edges);                    
+        };
     };
     
     handleShipRotation(player, currentShipDiv, shipObject, direction) {
@@ -556,5 +560,5 @@ export default class Game {
         for (const placedShip of  player.gameboard.ships) {
             player.gameboard.markShipEdges(placedShip.ship.edges);                    
         };
-    };
+    };    
 };

@@ -472,19 +472,9 @@ export default class Game {
                 // shipObject { ship: {}, row: number, col: number }
                 const shipObject = tempPlayer.gameboard.ships[0];
                 
-                this.handleShipPlacement(player, shipObject);               
-         
-                let currentCell = document.querySelector(`[data-row="${shipObject.row}"][data-col="${shipObject.col}"]`);
-
-                currentCell.appendChild(currentShipDiv);
-                currentShipDiv.classList.remove("hidden");                
-               
-                if (player.gameboard.ships.length === 10) {
-                    const buttonStartGame = document.getElementById("button-start-game");
-
-                    buttonStartGame.setAttribute("data-ship-placement", "manual");                
-                    buttonStartGame.disabled = false;                    
-                };
+                this.handleShipPlacement(player, shipObject);
+                this.shipDivPlacement(currentShipDiv, shipObject);
+                this.checkAllShipsPlaced(player);               
                 
                 currentShipDiv.onclick = () => {
                     this.handleShipRotation(player, currentShipDiv, shipObject, direction);
@@ -499,7 +489,7 @@ export default class Game {
                 cellDiv.classList.remove("ship-overlay-green");
             };
         });
-    };
+    };   
     
     handleShipPlacement(player, shipObject) {
         if (player.gameboard.isShipExist(shipObject.ship)) {
@@ -560,5 +550,21 @@ export default class Game {
         for (const placedShip of  player.gameboard.ships) {
             player.gameboard.markShipEdges(placedShip.ship.edges);                    
         };
-    };    
+    };
+    
+    shipDivPlacement(shipDiv, shipObject) {
+        const currentCell = document.querySelector(`[data-row="${shipObject.row}"][data-col="${shipObject.col}"]`);
+
+        currentCell.appendChild(shipDiv);
+        shipDiv.classList.remove("hidden");
+    };
+
+    checkAllShipsPlaced(player) {
+        if (player.gameboard.ships.length === 10) {
+            const buttonStartGame = document.getElementById("button-start-game");
+
+            buttonStartGame.setAttribute("data-ship-placement", "manual");                
+            buttonStartGame.disabled = false;                    
+        };
+    };
 };

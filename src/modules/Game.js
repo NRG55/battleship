@@ -418,46 +418,7 @@ export default class Game {
                 shipCell.addEventListener("mouseover", (e) => {             
                     offset = e.target.getAttribute("data-offset");                     
                 });
-            };       
-           
-            for (const cell of cells) {               
-                cell.addEventListener("dragover", (e) => {
-                    e.preventDefault();
-
-                    if (e.target.classList.contains("ship-cell") || 
-                        e.target.classList.contains("ship-draggable")) return;
-
-                    const row = Number(e.target.getAttribute("data-row"));                                                                                 
-                    const col = Number(e.target.getAttribute("data-col"));                   
-                    
-                    tempPlayer.gameboard.ships = [];                             
-                    const coordinates = [];                    
-                    const colStart = direction === 'horizontal' ? (col - offset) : col;
-                   
-                    if (colStart < 10 && colStart >= 0 && row >= 0 ) {
-                        coordinates.push([row, colStart]);                                                                      
-                    };               
-
-                    const startCoords = coordinates[0];                 
-                
-                    if (startCoords === undefined) return;
-
-                    let ship = new Ship(shipLength);                   
-              
-                    ship.direction = direction;
-                    ship.id = shipId;
-
-                    tempPlayer.gameboard.ships.push({ ship: ship, row: startCoords[0], col: startCoords[1]});
-                   
-                    if (!player.gameboard.isDropPossible(ship, startCoords[0], startCoords[1])) {
-                        return;
-                    };
-
-                    this.drawShipsOverlay(tempPlayer, false);                
-                  
-                    return tempPlayer;
-                });         
-            };          
+            };                    
 
             shipDiv.addEventListener("dragend", (e) => {                            
                 const cellDivs = document.querySelectorAll(".ship-overlay-green");
@@ -480,7 +441,46 @@ export default class Game {
                     this.handleShipRotation(player, currentShipDiv, shipObject, direction);
                 };                       
             });
-        };     
+        };
+        
+        for (const cell of cells) {               
+            cell.addEventListener("dragover", (e) => {
+                e.preventDefault();
+
+                if (e.target.classList.contains("ship-cell") || 
+                    e.target.classList.contains("ship-draggable")) return;
+
+                const row = Number(e.target.getAttribute("data-row"));                                                                                 
+                const col = Number(e.target.getAttribute("data-col"));                   
+                
+                tempPlayer.gameboard.ships = [];                             
+                const coordinates = [];                    
+                const colStart = direction === 'horizontal' ? (col - offset) : col;
+               
+                if (colStart < 10 && colStart >= 0 && row >= 0 ) {
+                    coordinates.push([row, colStart]);                                                                      
+                };               
+
+                const startCoords = coordinates[0];                 
+            
+                if (startCoords === undefined) return;
+
+                let ship = new Ship(shipLength);                   
+          
+                ship.direction = direction;
+                ship.id = shipId;
+
+                tempPlayer.gameboard.ships.push({ ship: ship, row: startCoords[0], col: startCoords[1]});
+               
+                if (!player.gameboard.isDropPossible(ship, startCoords[0], startCoords[1])) {
+                    return;
+                };
+
+                this.drawShipsOverlay(tempPlayer, false);                
+              
+                return tempPlayer;
+            });         
+        };
 
         body.addEventListener("dragenter", () => { 
             const cellDivs = document.querySelectorAll(".ship-overlay-green");

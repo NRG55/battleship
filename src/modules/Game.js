@@ -378,7 +378,7 @@ export default class Game {
 
     handleDragAndDrop(player) {
         const body = document.querySelector("body");        
-        const cells = document.querySelectorAll("div[data-col][data-row]");
+        const cells = document.querySelectorAll("button[data-col][data-row]");
         const shipsDivs = document.querySelectorAll(".ship-draggable");    
              
         const tempPlayer = new Player("human", new Gameboard());

@@ -19,7 +19,7 @@ export default class DOM {
             rowDiv.classList.add("board-row");           
 
             for (let col = 0; col < boardSize; col++) {
-                const square = document.createElement("div");
+                const square = document.createElement("button");
 
                 if (row === 0) {
                     const markerCol = document.createElement("div");
@@ -76,7 +76,7 @@ export default class DOM {
   
     renderShips(parentElement, ships) {
         for (const ship of ships) {
-            const cell =  parentElement.querySelector(`div[data-row='${ship.row}'][data-col='${ship.col}']`);              
+            const cell =  parentElement.querySelector(`button[data-row='${ship.row}'][data-col='${ship.col}']`);              
      
             cell.classList.add("ship");   
         };   
@@ -87,7 +87,7 @@ export default class DOM {
             const row = shot.split(',')[0];
             const col = shot.split(',')[1];
                   
-            const cell =  parentElement.querySelector(`div[data-row='${row}'][data-col='${col}']`);           
+            const cell =  parentElement.querySelector(`button[data-row='${row}'][data-col='${col}']`);           
                    
             cell.classList.add("cell-shot");   
         };       
@@ -95,7 +95,7 @@ export default class DOM {
 
     renderHits(parentElement, hits) {
         for (const hit of hits) {
-            const cell =  parentElement.querySelector(`div[data-row='${hit.row}'][data-col='${hit.col}']`); 
+            const cell =  parentElement.querySelector(`button[data-row='${hit.row}'][data-col='${hit.col}']`); 
                    
             cell.classList.add("cell-hit");   
         };       

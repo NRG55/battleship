@@ -56,7 +56,8 @@ main {
     justify-content: center;
     align-items: center;
     border: solid rgb(230, 227, 227) 1px; 
-    cursor: pointer;   
+    cursor: pointer; 
+    background: none;    
 }
 
 .board-cell:hover {
@@ -194,36 +195,13 @@ main {
 
 .ship-draggable {
     position: absolute;
-    display: flex;
-    width: fit-content; 
-    height: fit-content;
+    display: flex;   
     background-color: rgba(134, 168, 243, 0.1); 
     border: solid 2px var(--color-blue);
     cursor: move;
     z-index: 100;
-    left: -2px;
-    top: -1px;
-}
-
-.ship-draggable[data-length="4"] {   
-    padding-right: 6px; 
-}
-
-.ship-draggable[data-length="3"] {
-    padding-right: 4px;
-}
-
-.ship-draggable[data-length="2"] {
-    padding-right: 2px;
-}
-
-.ship-draggable-vertical {    
-    position: absolute;
-    background-color: rgba(134, 168, 243, 0.1); 
-    border: solid 2px var(--color-blue); 
-    width: 2rem;
-    height: 8rem;
-    z-index: 100;    
+    left: -3px;
+    top: -3px;
 }
 
 .ships-row {
@@ -243,7 +221,7 @@ main {
 .ship-box-2,
 .ship-box-3,
 .ship-box-4 {
-    height: 2rem;
+    height: 30px;
 }
 
 .ship-box-1 {
@@ -251,16 +229,15 @@ main {
 }
 
 .ship-box-2 {
-    width: 62px;   
+    width: 60px;   
 }
 
 .ship-box-3 {
-    width: 6rem;   
+    width: 92px;   
 }
 
 .ship-box-4 {
-    width: 8rem; 
-    padding-right: 6px;    
+    width: 124px;     
 }
 
 .draggable-ships-container {
@@ -344,19 +321,19 @@ button:disabled {
     visibility: hidden;
 }
 
-#ship-1[data-direction="vertical"] {
-    width: 26px;
-    height: 132px;
+.ship-draggable[data-length="4"][data-direction="vertical"] {
+    width: 32px;
+    height: 128px;
 }
 
 .ship-draggable[data-length="3"][data-direction="vertical"] {
-    width: 28px;
-    height: 100px;
+    width: 32px;
+    height: 96px;
 }
 
 .ship-draggable[data-length="2"][data-direction="vertical"] {
-    width: 29px;
-    height: 66px;
+    width: 32px;
+    height: 64px;
 }
 
 .ship-rotation-error {

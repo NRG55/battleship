@@ -1,6 +1,6 @@
 :root {
     --cell-size: 2rem;
-    --color-blue: rgb(50, 81, 255); 
+    --color-blue: rgb(119, 138, 245); 
     --color-green: rgb(47, 184, 47);
     --color-red: rgb(250, 54, 54); 
 }
@@ -11,8 +11,9 @@ body {
     margin: 0;
     user-select: none; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: rgb(83, 81, 81);
+    color: rgb(199, 196, 196);
     letter-spacing: 1px;
+    background-color: rgb(37, 54, 99);
 }
 
 header {
@@ -55,9 +56,11 @@ main {
     display: grid;
     justify-content: center;
     align-items: center;
-    border: solid rgb(230, 227, 227) 1px; 
+    border-color: rgb(37, 54, 99);
+    border-style: none;   
     cursor: pointer; 
-    background: none;    
+    background: rgb(51, 72, 128);    
+    border-radius: 2px;  
 }
 
 .board-cell:hover {
@@ -73,7 +76,7 @@ main {
     position: absolute;   
     width: 100%;
     text-align: center;   
-    color: rgb(151, 151, 153);
+    color: rgb(178, 178, 180);
     pointer-events: none;
 }
 
@@ -90,7 +93,13 @@ main {
 
 #computer,
 #human {
-    position: relative;
+    position: relative; 
+    display: grid;
+    gap: 2px;      
+}
+
+.board-row {   
+    gap: 2px; 
 }
 
 #ships-overlay-computer,
@@ -102,7 +111,7 @@ main {
     width: 100%;
     height: 100%;
     pointer-events: none; 
-    outline: solid 2px rgb(228, 224, 224);  
+    /* outline: solid 2px rgb(37, 54, 99);   */
 }
 
 #ships-overlay-extra {
@@ -114,16 +123,17 @@ main {
 .ship-overlay-color,
 .ship-overlay-sunk {
     position: absolute;   
-    pointer-events: none; 
+    pointer-events: none;
+    border-radius: 2px; 
 }
 
 .ship-overlay-blue {   
-    background-color: rgba(134, 168, 243, 0.1); 
+    background-color: rgba(119, 138, 245, 0.1);
     outline: solid 2px var(--color-blue);    
 }
 
 .ship-overlay-green {   
-    background-color: rgba(158, 241, 169, 0.1); 
+    /* background-color: rgba(158, 241, 169, 0.1);  */
     outline: solid 1px var(--color-green);   
 }
 
@@ -196,12 +206,13 @@ main {
 .ship-draggable {
     position: absolute;
     display: flex;   
-    background-color: rgba(134, 168, 243, 0.1); 
+    /* background-color: rgba(134, 168, 243, 0.1);  */
     border: solid 2px var(--color-blue);
     cursor: move;
     z-index: 100;
     left: -3px;
     top: -3px;
+    border-radius: 2px;
 }
 
 .ships-row {
@@ -212,9 +223,10 @@ main {
 
 .ship-box {
     position: relative;    
-    border: dotted 1px rgb(197, 192, 192);  
+    border: dotted 1px rgb(89, 112, 212);  
     padding-right: 4px;
     padding-bottom: 2px;
+    border-radius: 2px;
 }
 
 .ship-box-1,

@@ -76,8 +76,11 @@ export default class DOM {
   
     renderShips(parentElement, ships) {
         for (const ship of ships) {
-            const cell =  parentElement.querySelector(`button[data-row='${ship.row}'][data-col='${ship.col}']`);              
-     
+            const cell =  parentElement.querySelector(`button[data-row='${ship.row}'][data-col='${ship.col}']`);
+            
+            // const shipDiv = document.createElement("div");
+            // shipDiv.classList.add("ship-draggable", "ship-overlay-blue");
+   
             cell.classList.add("ship");   
         };   
     };
@@ -133,7 +136,7 @@ export default class DOM {
         return notificationWrap;    
     };
 
-    renderShipsSection() {
+    renderShipsPortSection() {
         document.querySelector("main")
             .innerHTML += `
                         <section>
@@ -141,11 +144,84 @@ export default class DOM {
                                 <div class="draggable-ships-instruction">
                                     Drag the ships to the board. Click on any ship on the board to rotate.
                                 </div>                           
-                                <div class="ships-rows">                                                  
+                                <div class="ships-port">                                                  
                                 </div>
                             </div>
                         </section>                                                 
                         `
+    };
+
+    renderShipsPortLines() {
+        const shipsPortLines = document.querySelector(".ships-port");
+
+        for (let i = 1; i <= 4; i++) {
+            const shipsRow = document.createElement("div");
+            shipsRow.classList.add("ships-port-line");
+            shipsRow.id = "ships-port-line-" + i;
+
+            shipsPortLines.appendChild(shipsRow);
+        };
+    };
+
+    renderShipsBoxes() {
+        const shipPortLineOne = document.getElementById("ships-port-line-1");
+        const shipPortLineTwo= document.getElementById("ships-port-line-2");
+        const shipPortLineThree = document.getElementById("ships-port-line-3");
+        const shipPortLineFour = document.getElementById("ships-port-line-4");
+
+        const shipsLengths = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+
+        for (const shipLength of shipsLengths) {
+            const shipBox = document.createElement("div");
+            shipBox.classList.add("ship-box", "ship-box-length-" + shipLength);
+            shipBox.setAttribute("data-length", shipLength)          
+
+            if (shipLength === 4) {
+                shipPortLineOne.appendChild(shipBox);             
+            };
+
+            if (shipLength === 3) {
+                shipPortLineTwo.appendChild(shipBox);               
+            };
+
+            if (shipLength === 2) {
+                shipPortLineThree.appendChild(shipBox);              
+            };
+
+            if (shipLength === 1) {
+                shipPortLineFour.appendChild(shipBox);              
+            };        
+        };
+    };
+
+    renderShipsDivs() {
+        const shipsPortLines = document.querySelectorAll(".ships-port-line");     
+        let shipId = 1;
+     
+        for (const portLine of shipsPortLines) {
+            const shipBoxes = portLine.querySelectorAll(".ship-box");            
+
+            for (const shipBox of shipBoxes) {             
+                const shipLength = shipBox.getAttribute("data-length");                
+                const shipDiv = document.createElement("div");
+         
+                shipDiv.classList.add("ship-draggable");
+                shipDiv.id = "ship-" + shipId++;
+                shipDiv.setAttribute("data-length", shipLength);
+                shipDiv.setAttribute("data-direction", "horizontal");
+                shipDiv.draggable = true;
+
+                shipBox.appendChild(shipDiv)
+
+                for (let i = 0; i < shipLength; i++ ) {
+                    const cell = document.createElement("div");
+                    
+                    cell.setAttribute("data-offset", i);
+                    cell.classList.add("ship-cell");            
+                    shipDiv.appendChild(cell);
+                };                 
+            };
+        };             
     };
 
     renderPreGameButtons() {

@@ -16,8 +16,10 @@ export default class Game {
 
     preGameSetup(player) {
         this.dom.renderHeaderAndMain();         
-        this.dom.renderShipsSection();
-        this.createDraggableShips();
+        this.dom.renderShipsPortSection();
+        this.dom.renderShipsPortLines();
+        this.dom.renderShipsBoxes();
+        this.dom.renderShipsDivs();       
 
         this.dom.renderPlayerSection(player); 
 
@@ -27,67 +29,6 @@ export default class Game {
         this.dom.renderPreGameButtons();      
         this.addListenersPreGameButtons(player);
         this.handleDragAndDrop(player);  
-    };
-
-    createDraggableShips() { 
-        const shipsRows = document.querySelector(".ships-rows");
-        const shipsLengths = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
-        let shipId = 1;
-
-        for (let i = 0; i < 4; i++) {
-            const shipsRow = document.createElement("div");
-            shipsRow.classList.add("ships-row");
-            shipsRow.id = "ships-row-" + i;
-
-            shipsRows.appendChild(shipsRow);
-        };
-       
-        for (const shipLength of shipsLengths) {
-            const shipBox = document.createElement("div");
-            shipBox.classList.add("ship-box", "ship-box-" + shipLength);        
-           
-            const shipDiv = document.createElement("div");
-            shipDiv.classList.add("ship-draggable");
-            shipDiv.id = "ship-" + shipId++;
-            shipDiv.setAttribute("data-length", shipLength);
-            shipDiv.setAttribute("data-direction", "horizontal");
-            shipDiv.draggable = true;
-
-            shipBox.appendChild(shipDiv)
-
-            for (let i = 0; i < shipLength; i++ ) {
-                const cell = document.createElement("div");
-                
-                cell.setAttribute("data-offset", i);
-                cell.classList.add("ship-cell");            
-                shipDiv.appendChild(cell);
-            };           
-            
-            const shipRowOne = document.getElementById("ships-row-0");
-            const shipRowTwo= document.getElementById("ships-row-1");
-            const shipRowThree = document.getElementById("ships-row-2");
-            const shipRowFour = document.getElementById("ships-row-3");
-
-            if (shipLength === 4) {
-                shipRowOne.appendChild(shipBox);
-                shipBox.appendChild(shipDiv);
-            };
-
-            if (shipLength === 3) {
-                shipRowTwo.appendChild(shipBox);
-                shipBox.appendChild(shipDiv);
-            };
-
-            if (shipLength === 2) {
-                shipRowThree.appendChild(shipBox);
-                shipBox.appendChild(shipDiv);
-            };
-
-            if (shipLength === 1) {
-                shipRowFour.appendChild(shipBox);
-                shipBox.appendChild(shipDiv);
-            };        
-        };      
     };
 
     addBoardEventListeners(parentElement, player) {
@@ -322,7 +263,7 @@ export default class Game {
         const buttonRandomize = document.getElementById("button-randomize");
         const buttonDragAndDrop = document.getElementById("button-drag-and-drop");
         const buttonStartGame = document.getElementById("button-start-game");
-        const shipsSection = document.querySelector(".ships-rows")
+        const shipsSection = document.querySelector(".ships-port")
       
         buttonRandomize.onclick = () => {
             player.gameboard.clearBoard();            

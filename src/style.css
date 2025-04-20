@@ -2,7 +2,7 @@
     --cell-size: 2rem;
     --color-blue: rgb(119, 138, 245); 
     --color-green: rgb(47, 184, 47);
-    --color-red: rgb(250, 54, 54); 
+    --color-red: rgb(247, 79, 79); 
 }
 
 body {     
@@ -110,7 +110,7 @@ main {
     border: solid 2px var(--color-blue);
     cursor: move;
     z-index: 100;
-    /* left: -3px; */
+    /* left: -2px; */
     top: 0px;
     border-radius: 2px;
 }
@@ -133,17 +133,18 @@ main {
 }
 
 .ship-overlay,
-.ship-overlay-color,
+.ship-overlay-blue,
 .ship-overlay-sunk {
     position: absolute;   
-    pointer-events: none;
-    border-radius: 2px; 
+    /* pointer-events: none; */
+    border-radius: 2px;      
 }
 
 .ship-overlay-blue {   
     background-color: rgb(83, 109, 182);
     border: none;
     outline: solid 2px rgb(31, 46, 87);
+ 
     /* box-shadow: 0px 0px 1px 1px var(--color-blue);     */
 }
 
@@ -214,13 +215,13 @@ main {
     padding: 4px 8px; 
 }
 
-.ships-rows {
+.ships-port {
     display: grid;
     gap: 1rem;   
     height: 260px;   
 }
 
-.ships-row {
+.ships-port-line {
     position: relative;
     display: flex;
     gap: 1.5rem;
@@ -234,26 +235,26 @@ main {
     border-radius: 2px;
 }
 
-.ship-box-1,
-.ship-box-2,
-.ship-box-3,
-.ship-box-4 {
+.ship-box-length-1,
+.ship-box-length-2,
+.ship-box-length-3,
+.ship-box-length-4 {
     height: 30px;
 }
 
-.ship-box-1 {
+.ship-box-length-1 {
     width: 28px;    
 }
 
-.ship-box-2 {
+.ship-box-length-2 {
     width: 60px;   
 }
 
-.ship-box-3 {
+.ship-box-length-3 {
     width: 92px;   
 }
 
-.ship-box-4 {
+.ship-box-length-4 {
     width: 124px;     
 }
 
@@ -340,23 +341,35 @@ button:disabled {
 
 .ship-draggable[data-length="4"][data-direction="vertical"] {
     width: 32px;
-    height: 128px;
+    height: 134px;
 }
 
 .ship-draggable[data-length="3"][data-direction="vertical"] {
     width: 32px;
-    height: 96px;
+    height: 100px;
 }
 
 .ship-draggable[data-length="2"][data-direction="vertical"] {
     width: 32px;
-    height: 64px;
+    height: 66px;
+}
+
+.ship-draggable[data-length="4"][data-direction="horizontal"] {
+    width: 134px;   
+}
+
+.ship-draggable[data-length="3"][data-direction="horizontal"] {
+    width: 100px;   
+}
+
+.ship-draggable[data-length="2"][data-direction="horizontal"] {
+    width: 66px;    
 }
 
 .ship-rotation-error {
     animation: shake 0.82s;   
-    border-color: var(--color-red);
-    background-color: rgba(248, 136, 136, 0.1);
+    outline: solid 1px var(--color-red);
+    /* background-color: rgba(248, 136, 136, 0.1); */
 }
   
 @keyframes shake {

@@ -273,7 +273,7 @@ export default class Game {
             this.drawShipsOverlay(player);
             
             shipsSection.innerHTML = "";
-            this.createDraggableShips();
+            this.dom.renderShipsDivs();
 
             shipsSection.classList.add("disabled");
             buttonDragAndDrop.style.display = "block";    

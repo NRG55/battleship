@@ -152,76 +152,76 @@ export default class DOM {
     };
 
     renderShipsPortLines() {
-        const shipsPortLines = document.querySelector(".ships-port");
+        const shipsPort = document.querySelector(".ships-port");
+        let shipLength = 4;
 
         for (let i = 1; i <= 4; i++) {
-            const shipsRow = document.createElement("div");
-            shipsRow.classList.add("ships-port-line");
-            shipsRow.id = "ships-port-line-" + i;
+            const shipsPortLine = document.createElement("div");
+            shipsPortLine.classList.add("ships-port-line");
+            shipsPortLine.setAttribute("data-number-of-ships", i);
+            shipsPortLine.setAttribute("data-ships-length", shipLength); 
+            shipsPortLine.id = "ships-port-line-" + i;
 
-            shipsPortLines.appendChild(shipsRow);
+            shipsPort.appendChild(shipsPortLine);
+
+            shipLength = shipLength - 1;
         };
     };
 
-    renderShipsBoxes() {
-        const shipPortLineOne = document.getElementById("ships-port-line-1");
-        const shipPortLineTwo= document.getElementById("ships-port-line-2");
-        const shipPortLineThree = document.getElementById("ships-port-line-3");
-        const shipPortLineFour = document.getElementById("ships-port-line-4");
+    renderShipsBoxes() {     
+        const portLines = document.querySelectorAll(".ships-port-line");
 
-        const shipsLengths = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+        for (const portLine of portLines) {
+            const numberOfShips = portLine.getAttribute("data-number-of-ships");
+            const shipLength = portLine.getAttribute("data-ships-length");
+        
+            for (let i = 0; i < numberOfShips; i++) {
+                const shipBox = document.createElement("div");
 
-        for (const shipLength of shipsLengths) {
-            const shipBox = document.createElement("div");
-            shipBox.classList.add("ship-box", "ship-box-length-" + shipLength);
-            shipBox.setAttribute("data-length", shipLength)          
-
-            if (shipLength === 4) {
-                shipPortLineOne.appendChild(shipBox);             
-            };
-
-            if (shipLength === 3) {
-                shipPortLineTwo.appendChild(shipBox);               
-            };
-
-            if (shipLength === 2) {
-                shipPortLineThree.appendChild(shipBox);              
-            };
-
-            if (shipLength === 1) {
-                shipPortLineFour.appendChild(shipBox);              
-            };        
+                shipBox.classList.add("ship-box", "ship-box-length-" + shipLength);
+                shipBox.setAttribute("data-length", shipLength);
+                
+                portLine.appendChild(shipBox);
+            }; 
         };
     };
 
     renderShipsDivs() {
         const shipsPortLines = document.querySelectorAll(".ships-port-line");     
         let shipId = 1;
-     
+      
         for (const portLine of shipsPortLines) {
             const shipBoxes = portLine.querySelectorAll(".ship-box");            
 
             for (const shipBox of shipBoxes) {             
-                const shipLength = shipBox.getAttribute("data-length");                
-                const shipDiv = document.createElement("div");
-         
-                shipDiv.classList.add("ship-draggable");
-                shipDiv.id = "ship-" + shipId++;
-                shipDiv.setAttribute("data-length", shipLength);
-                shipDiv.setAttribute("data-direction", "horizontal");
-                shipDiv.draggable = true;
+                const shipLength = shipBox.getAttribute("data-length");
+                const shipDiv = this.renderShipDiv(shipId, shipLength);                
 
-                shipBox.appendChild(shipDiv)
+                shipBox.appendChild(shipDiv);
 
-                for (let i = 0; i < shipLength; i++ ) {
-                    const cell = document.createElement("div");
-                    
-                    cell.setAttribute("data-offset", i);
-                    cell.classList.add("ship-cell");            
-                    shipDiv.appendChild(cell);
-                };                 
+                shipId++;                       
             };
         };             
+    };
+
+    renderShipDiv(shipId, shipLength, direction = "horizontal") {
+        const shipDiv = document.createElement("div");
+    
+        shipDiv.classList.add("ship-draggable");
+        shipDiv.id = "ship-" + shipId;
+        shipDiv.setAttribute("data-length", shipLength);
+        shipDiv.setAttribute("data-direction", direction);
+        shipDiv.draggable = true;      
+
+        for (let i = 0; i < shipLength; i++ ) {
+            const cell = document.createElement("div");
+            
+            cell.setAttribute("data-offset", i);
+            cell.classList.add("ship-cell");            
+            shipDiv.appendChild(cell);
+        };
+        
+        return shipDiv;
     };
 
     renderPreGameButtons() {

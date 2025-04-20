@@ -388,43 +388,45 @@ export default class Game {
         let shipId;           
 
         for (const shipDiv of shipsDivs) {
-            const shipCells = shipDiv.childNodes;
-            let currentShipDiv; 
+            const shipCells = shipDiv.childNodes;            
             
-            shipDiv.addEventListener("drag", (e) => {                
-                currentShipDiv = e.target;
-                const shipData = player.gameboard.getPreviousShipData(currentShipDiv);               
+            shipDiv.addEventListener("dragstart", () => {               
+                shipDiv.classList.remove("ship-overlay-blue");
+            });
+            
+            shipDiv.addEventListener("drag", () => { 
+                const shipData = player.gameboard.getPreviousShipData(shipDiv);               
                
                 if (shipData) { 
-                    let shipById = player.gameboard.getShipById(currentShipDiv.id) 
+                    let shipById = player.gameboard.getShipById(shipDiv.id) 
                                  
                     player.gameboard.removePreviousShip(shipById.ship, shipData[0], shipData[1]);
                     player.gameboard.clearShipEdges(shipData[3]);
 
                     for (const placedShip of player.gameboard.ships) {
-                        if (placedShip.ship.id !== currentShipDiv.id) {
+                        if (placedShip.ship.id !== shipDiv.id) {
                             player.gameboard.markShipEdges(placedShip.ship.edges);
                         };                                           
                     };                   
                 };
-
-                e.target.classList.add("hidden");
-                shipId = currentShipDiv.id;         
+                
+                shipId = shipDiv.id;         
                 shipLength = Number(shipDiv.getAttribute("data-length"));
-                direction =  shipDiv.getAttribute("data-direction");                                                         
+                direction = shipDiv.getAttribute("data-direction");
+                shipDiv.classList.add("hidden");                                                         
             });            
            
             for (const shipCell of shipCells) {
-                shipCell.addEventListener("mouseover", (e) => {             
-                    offset = e.target.getAttribute("data-offset");                     
+                shipCell.addEventListener("mouseover", () => {             
+                    offset = shipCell.getAttribute("data-offset");                     
                 });
             };                    
 
-            shipDiv.addEventListener("dragend", (e) => {                            
+            shipDiv.addEventListener("dragend", () => {                            
                 const cellDivs = document.querySelectorAll(".ship-overlay-green");
                 
                 if (cellDivs.length === 0) {              
-                    return e.target.classList.remove("hidden");                          
+                    return shipDiv.classList.remove("hidden");                          
                 };
 
                 for (const cellDiv of cellDivs) {
@@ -434,11 +436,12 @@ export default class Game {
                 const shipObject = tempPlayer.gameboard.ships[0];
                 
                 this.handleShipPlacement(player, shipObject);
-                this.shipDivPlacement(currentShipDiv, shipObject);
-                this.checkAllShipsPlaced(player);               
-                
-                currentShipDiv.onclick = () => {
-                    this.handleShipRotation(player, currentShipDiv, shipObject, direction);
+                this.shipDivPlacement(shipDiv, shipObject);
+                this.checkAllShipsPlaced(player);                
+               
+                shipDiv.classList.add("ship-overlay-blue");
+                shipDiv.onclick = () => {
+                    this.handleShipRotation(player, shipDiv, shipObject, direction);
                 };                       
             });
         };

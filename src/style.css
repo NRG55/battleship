@@ -55,16 +55,17 @@ main {
     aspect-ratio: 1;  
     display: grid;
     justify-content: center;
-    align-items: center;
-    border-color: rgb(37, 54, 99);
-    border-style: none;   
+    align-items: center;   
+    border-style: none; 
+    /* border: rgb(37, 54, 99);   */
     cursor: pointer; 
     background: rgb(51, 72, 128);    
     border-radius: 2px;  
 }
 
 .board-cell:hover {
-    border-color: var(--color-green);
+    /* background-color: aliceblue; */
+    border: solid 1px rgb(75, 120, 187);   
 }
 
 .board-cell-nohover {    
@@ -102,6 +103,18 @@ main {
     gap: 2px; 
 }
 
+.ship-draggable {
+    position: absolute;
+    display: flex;   
+    /* background-color: rgba(134, 168, 243, 0.1);  */
+    border: solid 2px var(--color-blue);
+    cursor: move;
+    z-index: 100;
+    /* left: -3px; */
+    top: 0px;
+    border-radius: 2px;
+}
+
 #ships-overlay-computer,
 #ships-overlay-human,
 #ships-overlay-extra {
@@ -128,13 +141,16 @@ main {
 }
 
 .ship-overlay-blue {   
-    background-color: rgba(119, 138, 245, 0.1);
-    outline: solid 2px var(--color-blue);    
+    background-color: rgb(83, 109, 182);
+    border: none;
+    outline: solid 2px rgb(31, 46, 87);
+    /* box-shadow: 0px 0px 1px 1px var(--color-blue);     */
 }
 
 .ship-overlay-green {   
     /* background-color: rgba(158, 241, 169, 0.1);  */
-    outline: solid 1px var(--color-green);   
+    outline: solid 2px rgb(130, 187, 130);
+    /* box-shadow: 0px 0px 3px 2px rgb(122, 180, 122);    */
 }
 
 .ship-overlay-red {   
@@ -143,12 +159,12 @@ main {
 }
 
 .cell-shot {
-    background-color: rgba(190, 188, 188, 0.1);
+    background-color:  rgb(37, 54, 99);
 }
 
 .cell-shot::before {    
-    content: '•';   
-    color: black;   
+    /* content: '•';   
+    color: rgb(241, 238, 238);    */
 }
 
 .cell-hit::before { 
@@ -157,7 +173,8 @@ main {
     font-size: 1.5rem; 
     display: grid;
     justify-content: center;
-    align-items: center;            
+    align-items: center; 
+    z-index: 200;           
 }
 
 .notification-wrap { 
@@ -201,18 +218,6 @@ main {
     display: grid;
     gap: 1rem;   
     height: 260px;   
-}
-
-.ship-draggable {
-    position: absolute;
-    display: flex;   
-    /* background-color: rgba(134, 168, 243, 0.1);  */
-    border: solid 2px var(--color-blue);
-    cursor: move;
-    z-index: 100;
-    left: -3px;
-    top: -3px;
-    border-radius: 2px;
 }
 
 .ships-row {
@@ -326,7 +331,7 @@ button:disabled {
 
 .board-disabled {
     pointer-events: none; 
-    opacity: 0.4;  
+    opacity: 0.8;  
 }
 
 .hidden {

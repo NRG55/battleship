@@ -78,14 +78,16 @@ export default class Game {
         humanBoard.classList.add("board-disabled");       
     };
 
-    placeShipsRandomly(player) {                
+    placeShipsRandomly(player) {                      
         const shipsLengths = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+        let shipId = 1;
        
         for (const length of shipsLengths) {           
             const ship = new Ship(length);
+            ship.id = `ship-${shipId}`;
 
             if (Math.random() < 0.5) {
-                ship.rotate();
+                ship.rotate();                
             };
 
             let isInBounds = false;
@@ -96,6 +98,8 @@ export default class Game {
 
                 isInBounds = player.gameboard.placeShip([row, col], ship);                           
             };
+
+            shipId++;
         };       
 
         const parentElement = document.querySelector(`#${player.type}`); 
@@ -263,17 +267,32 @@ export default class Game {
         const buttonRandomize = document.getElementById("button-randomize");
         const buttonDragAndDrop = document.getElementById("button-drag-and-drop");
         const buttonStartGame = document.getElementById("button-start-game");
-        const shipsSection = document.querySelector(".ships-port")
+        const shipsSection = document.querySelector(".ships-port");        
       
         buttonRandomize.onclick = () => {
-            player.gameboard.clearBoard();            
+            player.gameboard.clearBoard();
+            shipsSection.innerHTML = ""; 
+
+            this.placeShipsRandomly(player);
+            this.dom.renderBoard(parentElement);                   
+            this.dom.renderShipsDivs(player);                    
+
+            player.gameboard.ships.forEach((shipObject) => {
+                const shipDiv = document.getElementById(`${shipObject.ship.id}`);               
+                const direction = shipDiv.getAttribute("data-direction");
+
+                player.gameboard.placeShip([shipObject.row, shipObject.col], shipObject.ship);
                 
-            this.dom.renderBoard(parentElement); 
-            this.placeShipsRandomly(player);        
-            this.drawShipsOverlay(player);
+                shipObject.ship.edges = player.gameboard.getShipEdges(shipObject.row, shipObject.col, shipObject.ship);
+                player.gameboard.markShipEdges(shipObject.ship.edges);
             
-            shipsSection.innerHTML = "";
-            this.dom.renderShipsDivs();
+                shipDiv.onclick = () => {                                                             
+                    this.handleShipRotation(player, shipDiv, shipObject, direction);
+                };                
+            });           
+           
+            this.handleDragAndDrop(player);
+            this.checkAllShipsPlaced(player);        
 
             shipsSection.classList.add("disabled");
             buttonDragAndDrop.style.display = "block";    
@@ -329,15 +348,23 @@ export default class Game {
         let shipId;           
 
         for (const shipDiv of shipsDivs) {
-            const shipCells = shipDiv.childNodes;            
+            const shipCells = shipDiv.childNodes;
+            
+            for (const shipCell of shipCells) {
+                shipCell.onmousedown = () => {             
+                    offset = shipCell.getAttribute("data-offset"); 
+                    console.log(offset)                    
+                };
+            };
             
             shipDiv.addEventListener("dragstart", () => {               
-                shipDiv.classList.remove("ship-overlay-blue");
+                shipDiv.classList.remove("ship-overlay-blue"); 
+                console.log(offset)               
             });
             
             shipDiv.addEventListener("drag", () => { 
-                const shipData = player.gameboard.getPreviousShipData(shipDiv);               
-               
+                const shipData = player.gameboard.getPreviousShipData(shipDiv);
+           
                 if (shipData) { 
                     let shipById = player.gameboard.getShipById(shipDiv.id) 
                                  
@@ -357,11 +384,7 @@ export default class Game {
                 shipDiv.classList.add("hidden");                                                         
             });            
            
-            for (const shipCell of shipCells) {
-                shipCell.addEventListener("mouseover", () => {             
-                    offset = shipCell.getAttribute("data-offset");                     
-                });
-            };                    
+                               
 
             shipDiv.addEventListener("dragend", () => {                            
                 const cellDivs = document.querySelectorAll(".ship-overlay-green");
@@ -400,9 +423,10 @@ export default class Game {
                 tempPlayer.gameboard.ships = [];                             
                 const coordinates = [];                    
                 const colStart = direction === 'horizontal' ? (col - offset) : col;
+                const rowStart = direction === 'horizontal' ? row : (row - offset);
                
                 if (colStart < 10 && colStart >= 0 && row >= 0 ) {
-                    coordinates.push([row, colStart]);                                                                      
+                    coordinates.push([rowStart, colStart]);                                                                      
                 };               
 
                 const startCoords = coordinates[0];                 

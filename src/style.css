@@ -137,7 +137,9 @@ main {
 .ship-overlay-sunk {
     position: absolute;   
     /* pointer-events: none; */
-    border-radius: 2px;      
+    border-radius: 2px; 
+    top: 0px;
+    left: 0px;     
 }
 
 .ship-overlay-blue {   
@@ -339,7 +341,11 @@ button:disabled {
     visibility: hidden;
 }
 
-.ship-draggable[data-length="4"][data-direction="vertical"] {
+.ship-draggable[data-direction="vertical"] {
+    display: grid;
+}
+
+.ship-draggable[data-length="4"][data-direction="vertical"] {   
     width: 32px;
     height: 134px;
 }

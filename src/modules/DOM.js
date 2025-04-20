@@ -186,16 +186,37 @@ export default class DOM {
         };
     };
 
-    renderShipsDivs() {
-        const shipsPortLines = document.querySelectorAll(".ships-port-line");     
+    renderShipsDivs(player) {
         let shipId = 1;
+
+        if (player) {
+            player.gameboard.ships.forEach((shipObject) => { 
+                if (!shipObject) return;        
+                const { ship, row, col } = shipObject;
+
+                const parentElement = document.querySelector(`button[data-row='${row}'][data-col='${col}']`);
+
+                const shipDiv = this.renderShipDiv(shipId, ship.length, ship.direction); 
+                shipDiv.classList.add('ship-draggable', 'ship-overlay', 'ship-overlay-blue');               
+                
+                parentElement.append(shipDiv);
+                
+                shipId++;  
+              });
+
+              return;
+        };
+         
+        const shipsPortLines = document.querySelectorAll(".ships-port-line");      
       
         for (const portLine of shipsPortLines) {
             const shipBoxes = portLine.querySelectorAll(".ship-box");            
 
             for (const shipBox of shipBoxes) {             
                 const shipLength = shipBox.getAttribute("data-length");
-                const shipDiv = this.renderShipDiv(shipId, shipLength);                
+
+                const shipDiv = this.renderShipDiv(shipId, shipLength);
+                shipDiv.classList.add("ship-draggable");                
 
                 shipBox.appendChild(shipDiv);
 
@@ -205,9 +226,8 @@ export default class DOM {
     };
 
     renderShipDiv(shipId, shipLength, direction = "horizontal") {
-        const shipDiv = document.createElement("div");
-    
-        shipDiv.classList.add("ship-draggable");
+        const shipDiv = document.createElement("div");    
+        
         shipDiv.id = "ship-" + shipId;
         shipDiv.setAttribute("data-length", shipLength);
         shipDiv.setAttribute("data-direction", direction);

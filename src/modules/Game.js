@@ -16,15 +16,15 @@ export default class Game {
 
     preGameSetup(player) {
         this.dom.renderHeaderAndMain();         
-        this.dom.renderShipsPortSection();
+        this.dom.renderMainSections(player);
         this.dom.renderShipsPortLines();
         this.dom.renderShipsBoxes();
         this.dom.renderShipsDivs();       
 
         this.dom.renderPlayerSection(player); 
-
+       
         const parentElement = document.querySelector(`#${player.type}`);
-                
+              
         this.dom.renderBoard(parentElement);     
         this.dom.renderPreGameButtons();      
         this.addListenersPreGameButtons(player);
@@ -65,8 +65,12 @@ export default class Game {
     }; 
 
     startGame() {
+        const main = document.querySelector("main");
+        main.innerHTML = "";
+
         for (const player of this.players) {
-            this.dom.renderPlayerSection(player);           
+            main.appendChild(this.dom.renderPlayerSection(player))
+                      
         };
         
         this.updateBoards();        
@@ -265,13 +269,15 @@ export default class Game {
         const main = document.querySelector("main");
         const parentElement = document.querySelector(`#${player.type}`);
         const buttonRandomize = document.getElementById("button-randomize");
-        const buttonDragAndDrop = document.getElementById("button-drag-and-drop");
-        const buttonStartGame = document.getElementById("button-start-game");
-        const shipsSection = document.querySelector(".ships-port");        
-      
+        const buttonHome = document.getElementById("button-drag-and-drop");
+        const buttonStartGame = document.getElementById("button-start-game");          
+     
         buttonRandomize.onclick = () => {
             player.gameboard.clearBoard();
-            shipsSection.innerHTML = ""; 
+
+            if (main.querySelector(".section-ships")) {
+                main.querySelector(".section-ships").remove();
+            };         
 
             this.placeShipsRandomly(player);
             this.dom.renderBoard(parentElement);                   
@@ -289,31 +295,26 @@ export default class Game {
                 shipDiv.onclick = () => {                                                             
                     this.handleShipRotation(player, shipDiv, shipObject, direction);
                 };                
-            });           
+            });         
            
             this.handleDragAndDrop(player);
-            this.checkAllShipsPlaced(player);        
+            this.checkAllShipsPlaced(player);
 
-            shipsSection.classList.add("disabled");
-            buttonDragAndDrop.style.display = "block";    
             buttonStartGame.disabled = false;           
         };
 
-        buttonDragAndDrop.onclick = () => {
+        buttonHome.onclick = () => {
             main.innerHTML = "";
             
+            this.players = [this.player1];
             player.gameboard.clearBoard();
-            this.preGameSetup(player);                 
-            
-            shipsSection.classList.remove("disabled");
-            buttonDragAndDrop.style.display = "none";    
+            this.preGameSetup(player);           
+             
             buttonStartGame.disabled = true;           
         };
 
         buttonStartGame.onclick = (e) => {            
-            const shipPlacement = e.target.getAttribute("data-ship-placement");
-            
-            main.innerHTML = "";
+            const shipPlacement = e.target.getAttribute("data-ship-placement");        
 
             if (shipPlacement === "manual") {            
                 const ships = player.gameboard.ships;
@@ -324,13 +325,15 @@ export default class Game {
                 for (const ship of ships) {                
                     player.gameboard.placeShip([ship.row, ship.col], ship.ship);                   
                 };
-              
+                
+                this.player2.gameboard.clearBoard();
                 this.players.push(this.player2);
                 this.startGame(); 
 
                 return;
             }; 
             
+            this.player2.gameboard.clearBoard();
             this.players.push(this.player2);                     
             this.startGame();           
         };
@@ -352,14 +355,12 @@ export default class Game {
             
             for (const shipCell of shipCells) {
                 shipCell.onmousedown = () => {             
-                    offset = shipCell.getAttribute("data-offset"); 
-                    console.log(offset)                    
+                    offset = shipCell.getAttribute("data-offset");                                      
                 };
             };
             
             shipDiv.addEventListener("dragstart", () => {               
-                shipDiv.classList.remove("ship-overlay-blue"); 
-                console.log(offset)               
+                shipDiv.classList.remove("ship-overlay-blue");                             
             });
             
             shipDiv.addEventListener("drag", () => { 
@@ -382,9 +383,7 @@ export default class Game {
                 shipLength = Number(shipDiv.getAttribute("data-length"));
                 direction = shipDiv.getAttribute("data-direction");
                 shipDiv.classList.add("hidden");                                                         
-            });            
-           
-                               
+            });                            
 
             shipDiv.addEventListener("dragend", () => {                            
                 const cellDivs = document.querySelectorAll(".ship-overlay-green");
@@ -404,6 +403,7 @@ export default class Game {
                 this.checkAllShipsPlaced(player);                
                
                 shipDiv.classList.add("ship-overlay-blue");
+
                 shipDiv.onclick = () => {
                     this.handleShipRotation(player, shipDiv, shipObject, direction);
                 };                       
@@ -525,7 +525,7 @@ export default class Game {
 
         currentCell.appendChild(shipDiv);
         shipDiv.classList.remove("hidden");
-    };
+    };    
 
     checkAllShipsPlaced(player) {
         if (player.gameboard.ships.length === 10) {

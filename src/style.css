@@ -1,8 +1,9 @@
 :root {
     --cell-size: 2rem;
-    --color-blue: rgb(119, 138, 245); 
-    --color-green: rgb(47, 184, 47);
-    --color-red: rgb(247, 79, 79); 
+    --color-blue: rgb(37, 54, 99);
+    --color-ligth-blue: rgb(127, 176, 248);
+    --color-green:  rgb(96, 185, 123);
+    --color-red: rgb(201, 65, 65); 
 }
 
 body {     
@@ -13,21 +14,41 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: rgb(199, 196, 196);
     letter-spacing: 1px;
-    background-color: rgb(37, 54, 99);
+    background-color: rgb(37, 54, 99);    
 }
 
 header {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
+    text-align: center;
     font-size: 1.5rem;
     letter-spacing: 4px;
     font-weight: bold;
-    padding: 2rem;    
-    color: rgb(113, 180, 133);    
+    padding: 4rem 0;    
+    color: var(--color-green); 
+    width: 100vw;    
 
     span:nth-child(2) {
-        color:  rgb(113, 148, 201);
+        color: var(--color-ligth-blue); 
+    }
+
+    #button-drag-and-drop {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        bottom: 0;
+        margin: auto 0;
+        right: 4rem;
+        height: 3rem;
+        width: 3rem;
+        font-size: 2rem;
+        background-color: var(--color-blue); 
+        border: none;         
+        color: rgb(226, 226, 90);
+        opacity: 0.8;        
+    }
+
+    #button-drag-and-drop:hover {        
+        opacity: 1;
     }
 }
 
@@ -35,7 +56,7 @@ main {
     position: relative;  
     display: flex;
     gap: 4rem;
-    padding-top: 8rem;
+    justify-content: center;   
 }
 
 .board-row {
@@ -45,7 +66,7 @@ main {
 .board-title {
     text-align: center;
     height: 60px;
-    color:  rgb(110, 161, 110);   
+    color: var(--color-green);   
 }
 
 .board-cell,
@@ -57,14 +78,12 @@ main {
     justify-content: center;
     align-items: center;   
     border-style: none; 
-    /* border: rgb(37, 54, 99);   */
     cursor: pointer; 
     background: rgb(51, 72, 128);    
     border-radius: 2px;  
 }
 
-.board-cell:hover {
-    /* background-color: aliceblue; */
+.board-cell:hover {   
     border: solid 1px rgb(75, 120, 187);   
 }
 
@@ -106,8 +125,7 @@ main {
 .ship-draggable {
     position: absolute;
     display: flex;   
-    /* background-color: rgba(134, 168, 243, 0.1);  */
-    border: solid 2px var(--color-blue);
+    border: solid 2px var(--color-ligth-blue);
     cursor: move;
     z-index: 100;
     /* left: -2px; */
@@ -145,29 +163,20 @@ main {
 .ship-overlay-blue {   
     background-color: rgb(83, 109, 182);
     border: none;
-    outline: solid 2px rgb(31, 46, 87);
- 
-    /* box-shadow: 0px 0px 1px 1px var(--color-blue);     */
+    outline: solid 2px rgb(31, 46, 87); 
 }
 
-.ship-overlay-green {   
-    /* background-color: rgba(158, 241, 169, 0.1);  */
-    outline: solid 2px rgb(130, 187, 130);
-    /* box-shadow: 0px 0px 3px 2px rgb(122, 180, 122);    */
+.ship-overlay-green {    
+    outline: solid 2px rgb(130, 187, 130);   
 }
 
 .ship-overlay-red {   
-    background-color: rgba(253, 160, 165, 0.1);   
+    background-color: var(--color-blue); 
     outline: solid 2px var(--color-red);
 }
 
 .cell-shot {
     background-color:  rgb(37, 54, 99);
-}
-
-.cell-shot::before {    
-    /* content: '•';   
-    color: rgb(241, 238, 238);    */
 }
 
 .cell-hit::before { 
@@ -211,10 +220,11 @@ main {
 
 .button-rematch {
     cursor: pointer; 
-    border: solid 1px white;   
-    background-color: rgb(230, 216, 24); 
+    border: solid 1px rgb(238, 235, 235);   
+    background-color: rgb(224, 224, 111);
     color: rgb(19, 18, 18);
-    padding: 4px 8px; 
+    padding: 4px 8px;
+    font-size: 16px; 
 }
 
 .ships-port {
@@ -231,33 +241,34 @@ main {
 
 .ship-box {
     position: relative;    
-    border: dotted 1px rgb(89, 112, 212);  
-    padding-right: 4px;
+    border: dotted 1px rgb(89, 112, 212);
+    border-radius: 2px;  
+    /* padding-right: 4px;
     padding-bottom: 2px;
-    border-radius: 2px;
+    border-radius: 2px; */
 }
 
 .ship-box-length-1,
 .ship-box-length-2,
 .ship-box-length-3,
 .ship-box-length-4 {
-    height: 30px;
+    height: 34px;
 }
 
 .ship-box-length-1 {
-    width: 28px;    
+    width: 34px;    
 }
 
 .ship-box-length-2 {
-    width: 60px;   
+    width: 68px;   
 }
 
 .ship-box-length-3 {
-    width: 92px;   
+    width: 102px;   
 }
 
 .ship-box-length-4 {
-    width: 124px;     
+    width: 136px;     
 }
 
 .draggable-ships-container {
@@ -267,55 +278,41 @@ main {
     gap: 2.5rem;
 }
 
-.pre-game-buttons-container {
-    position: absolute;
-    width: 100%;
-    bottom: -3.5rem;
+.pre-game-buttons-container {   
     display: flex;
-    justify-content: space-between; 
-    
+    justify-content: space-between;
+    padding: 1rem 0;    
+  
     button {
         cursor: pointer;     
         font-size: 1rem;
         padding: 4px 8px;
-        border: none;
-        border-radius: 4px;        
-    }
-
-    div:nth-child(2) {
-        display: flex;
-        justify-content: space-between;                 
-        width: 340px;
-    }
-}
-
-#button-drag-and-drop { 
-    position: absolute;
-    display: none;
-    margin-right: 1rem;   
-    top: -12rem;
-    left: 5rem;   
-    background-color: white;
-    color: var(--color-blue);
-    border: solid 2px var(--color-blue);  
-    font-size: 12px;
+        border: solid 2px;
+        border-radius: 4px;
+        opacity: 0.8;         
+    }    
 }
 
 #button-randomize {  
-    color:var(--color-blue);
-    background-color: white;
-    border: solid 2px var(--color-blue);  
+    color: var(--color-ligth-blue); 
+    background-color: var(--color-blue);
+    border-color: var(--color-ligth-blue);   
+}
+
+#button-start-game:hover,
+#button-randomize:hover {  
+    opacity: 1;
 }
 
 #button-start-game {
     color: var(--color-green);
-    background-color: white;
-    border: solid 2px var(--color-green);    
+    background-color: var(--color-blue);
+    border: solid 2px var(--color-green);      
 }
 
 button:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
+    opacity: 0.3;  
+    pointer-events: none;
 }
 
 .ship-cell {

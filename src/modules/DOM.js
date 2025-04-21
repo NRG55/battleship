@@ -3,12 +3,22 @@ export default class DOM {
         const body = document.querySelector("body");
 
         body.innerHTML = `
-                <header><span>BATTLE</span><span>SHIP</span></header> 
+                <header><span>BATTLE</span><span>SHIP</span>
+                    <button id="button-drag-and-drop"><i class="fa fa-home"></i></button>
+                </header> 
                 <main></main>                         
                 `
     };
+
+    renderMainSections(player) {
+        const main = document.querySelector("main");
+        main.innerHTML = "";
+        
+        main.appendChild(this.renderShipsPortSection());
+        main.appendChild(this.renderPlayerSection(player));
+    };
     
-    renderBoard(parentElement, boardSize = 10) {
+    renderBoard(parentElement, boardSize = 10) {      
         parentElement.innerHTML = "";
 
         const markersCol = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];      
@@ -105,6 +115,9 @@ export default class DOM {
     };
 
     renderPlayerSection(player) {
+        const section = document.createElement("section");
+        section.classList.add("section-player");
+        
         let boardtitle;
 
         if (player.type === "human") {
@@ -112,14 +125,12 @@ export default class DOM {
         } else {
             boardtitle = "Opponent's board"
         };
-
-        document.querySelector("main")
-            .innerHTML += `
-                        <section>
-                            <div class="board-title">${boardtitle}</div>
-                            <div id="${player.type}"></div>
-                        </section>                                                 
-                        `
+       
+        section.innerHTML = `                  
+                        <div class="board-title">${boardtitle}</div>
+                        <div id="${player.type}"></div>                                                                   
+                    `
+        return section;
     };
 
     renderNotification() {
@@ -137,18 +148,19 @@ export default class DOM {
     };
 
     renderShipsPortSection() {
-        document.querySelector("main")
-            .innerHTML += `
-                        <section>
+        const section = document.createElement("section");
+        section.classList.add("section-ships");               
+        
+        section.innerHTML = `                      
                             <div class="draggable-ships-container">
                                 <div class="draggable-ships-instruction">
                                     Drag the ships to the board. Click on any ship on the board to rotate.
                                 </div>                           
                                 <div class="ships-port">                                                  
                                 </div>
-                            </div>
-                        </section>                                                 
+                            </div>                                                                        
                         `
+        return section;
     };
 
     renderShipsPortLines() {
@@ -245,20 +257,19 @@ export default class DOM {
     };
 
     renderPreGameButtons() {
-        const main = document.querySelector("main");
+        const sectionPlayer = document.querySelector(".section-player");
 
         const buttonsContainer = document.createElement("div");
 
         buttonsContainer.classList.add("pre-game-buttons-container");
         buttonsContainer.innerHTML = `
                                 <div>
-                                    <button id="button-drag-and-drop">Drag & Drop</button>                                   
+                                    <button id="button-randomize">Randomize</button>                                                                    
                                 </div>  
-                                <div> 
-                                    <button id="button-randomize">Randomize</button>                             
+                                <div>                                                                  
                                     <button id="button-start-game" data-ship-placement="random" disabled>Start Game</button>
                                 </div>    
                                 `
-        main.appendChild(buttonsContainer);
+        sectionPlayer.appendChild(buttonsContainer);
     };
 };

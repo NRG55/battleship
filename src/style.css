@@ -63,7 +63,8 @@ main {
     display: flex;
 }
 
-.board-title {
+.board-title-human,
+.board-title-computer {
     text-align: center;
     height: 60px;
     color: var(--color-green);   
@@ -135,7 +136,9 @@ main {
 
 #ships-overlay-computer,
 #ships-overlay-human,
-#ships-overlay-extra {
+#ships-overlay-extra,
+#board-overlay-computer,
+#board-overlay-human {
     position: absolute;
     top: 0;
     left: 0;   
@@ -150,11 +153,33 @@ main {
     outline: none;    
 }
 
+#board-overlay-computer,
+#board-overlay-human {
+    top: -4.5rem;
+    left: 5.5rem;
+    width: 10rem;
+    height: 2.5rem;    
+}
+
+.selected-board {
+    border: solid 1px rgb(201, 199, 105);
+    border-radius: 4px;
+}
+
+.selected-board {
+    animation: blinker 1s linear infinite;
+  }
+  
+  @keyframes blinker {
+    50% {
+      opacity: 0.4;
+    }
+  }
+
 .ship-overlay,
 .ship-overlay-blue,
 .ship-overlay-sunk {
     position: absolute;   
-    /* pointer-events: none; */
     border-radius: 2px; 
     top: 0px;
     left: 0px;     
@@ -163,7 +188,7 @@ main {
 .ship-overlay-blue {   
     background-color: rgb(83, 109, 182);
     border: none;
-    outline: solid 2px rgb(31, 46, 87); 
+    outline: solid 2px rgb(31, 46, 87);   
 }
 
 .ship-overlay-green {    

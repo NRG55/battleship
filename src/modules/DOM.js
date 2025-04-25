@@ -4,7 +4,7 @@ export default class DOM {
 
         body.innerHTML = `
                 <header><span>BATTLE</span><span>SHIP</span>
-                    <button id="button-drag-and-drop"><i class="fa fa-home"></i></button>
+                    <button id="button-drag-and-drop" title="Home"><i class="fa fa-home"></i></button>
                 </header> 
                 <main></main>                         
                 `
@@ -56,7 +56,8 @@ export default class DOM {
                 };
                 
                 square.setAttribute("data-row", row);
-                square.setAttribute("data-col", col);         
+                square.setAttribute("data-col", col); 
+                square.title = `Board cell row ${row} column ${col}`;        
               
                 rowDiv.appendChild(square);                           
             };
@@ -65,7 +66,8 @@ export default class DOM {
         };       
      
         parentElement.append(this.renderShipsOverlay(parentElement.id));
-        parentElement.append(this.renderExtraShipsOverlay());                
+        parentElement.append(this.renderExtraShipsOverlay());
+        parentElement.append(this.renderBoardOverlay(parentElement.id));                 
     };
 
     renderShipsOverlay(parentElementId) {
@@ -82,7 +84,19 @@ export default class DOM {
         overlay.id = `ships-overlay-extra`;
 
         return overlay;        
-    }; 
+    };
+    
+    renderBoardOverlay(parentElementId) {
+        const overlay = document.createElement("div");         
+
+        overlay.id = `board-overlay-${parentElementId}`;
+
+        // if (parentElementId === "computer") {
+        //     overlay.classList.add("selected-board")
+        // };
+
+        return overlay;        
+    };
   
     renderShips(parentElement, ships) {
         for (const ship of ships) {
@@ -127,7 +141,7 @@ export default class DOM {
         };
        
         section.innerHTML = `                  
-                        <div class="board-title">${boardtitle}</div>
+                        <div class="board-title-${player.type}">${boardtitle}</div>
                         <div id="${player.type}"></div>                                                                   
                     `
         return section;

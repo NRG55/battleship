@@ -205,24 +205,16 @@ export default class Game {
         };
     };
 
-    handleComputerTurn() {
-        const humanBoard = document.getElementById("human");
-        const computerBoard = document.getElementById("computer");
-
-        humanBoard.classList.remove("board-disabled");
-        computerBoard.classList.add("board-disabled");       
+    handleComputerTurn() { 
+        const humanBoard = document.getElementById("board-overlay-human");
+        
+        humanBoard.classList.add("selected-board"); 
         
         setTimeout(() => { 
             const {row, col} = this.getRandomCoordinates();       
-
+            
             this.handleShot(row, col, this.player1.gameboard); 
-        }, 400);
-
-         
-        setTimeout(() => { 
-            humanBoard.classList.add("board-disabled");
-            computerBoard.classList.remove("board-disabled");            
-        }, 800);      
+        }, 1200);          
     };
 
     getRandomCoordinates() {
@@ -348,7 +340,8 @@ export default class Game {
         let offset; // to get the first cell of the ship 
         let shipLength;
         let direction; 
-        let shipId;           
+        let shipId;
+        let currentShipDiv;           
 
         for (const shipDiv of shipsDivs) {
             const shipCells = shipDiv.childNodes;
@@ -360,7 +353,8 @@ export default class Game {
             };
             
             shipDiv.addEventListener("dragstart", () => {               
-                shipDiv.classList.remove("ship-overlay-blue");                             
+                shipDiv.classList.remove("ship-overlay-blue"); 
+                currentShipDiv = shipDiv;                            
             });
             
             shipDiv.addEventListener("drag", () => { 
@@ -387,6 +381,12 @@ export default class Game {
 
             shipDiv.addEventListener("dragend", () => {                            
                 const cellDivs = document.querySelectorAll(".ship-overlay-green");
+                const sectionPlayer = document.querySelector(".section-player");
+                const shipsDivs = sectionPlayer.querySelectorAll(".ship-draggable");
+
+                for (const shipDiv of shipsDivs) {                    
+                    shipDiv.classList.add("ship-overlay-blue")
+                };
                 
                 if (cellDivs.length === 0) {              
                     return shipDiv.classList.remove("hidden");                          
@@ -395,6 +395,7 @@ export default class Game {
                 for (const cellDiv of cellDivs) {
                     cellDiv.classList.remove("ship-overlay-green");                                              
                 };               
+               
                 // shipObject { ship: {}, row: number, col: number }
                 const shipObject = tempPlayer.gameboard.ships[0];
                 
@@ -406,7 +407,8 @@ export default class Game {
 
                 shipDiv.onclick = () => {
                     this.handleShipRotation(player, shipDiv, shipObject, direction);
-                };                       
+                };
+
             });
         };
         
@@ -444,21 +446,21 @@ export default class Game {
                     return;
                 };
 
-                this.drawShipsOverlay(tempPlayer, false);                
+                this.drawShipsOverlay(tempPlayer, false);                             
               
                 return tempPlayer;
             });         
-        };
+        };      
 
         body.addEventListener("dragenter", () => { 
-            const cellDivs = document.querySelectorAll(".ship-overlay-green");
+            const cellDivs = document.querySelectorAll(".ship-overlay-green");            
 
             for (const cellDiv of cellDivs) {
                 cellDiv.classList.remove("ship-overlay-green");
             };
         });
-    };   
-    
+    };
+
     handleShipPlacement(player, shipObject) {
         if (player.gameboard.isShipExist(shipObject.ship)) {
             // shipData is [row, col, direction, array of ship edges]
